@@ -5,6 +5,7 @@ import 'routes/AppRoutes.dart';
 import 'viewmodels/OnboardingViewModel.dart';
 import 'viewmodels/LanguageViewModel.dart';
 import 'viewmodels/ThemeViewModel.dart';
+import 'viewmodels/LoginViewModel.dart';
 
 void main() {
   runApp(const ChopChopApp());
@@ -20,6 +21,7 @@ class ChopChopApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OnboardingViewModel()),
         ChangeNotifierProvider(create: (_) => LanguageViewModel()),
         ChangeNotifierProvider(create: (_) => ThemeViewModel()),
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
       ],
       // WRAP MaterialApp with Consumer to listen for changes
       child: Consumer<ThemeViewModel>(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../views/SplashScreen.dart';
 import '../views/OnboardingScreens.dart';
 import '../views/LanguageSelectionScreen.dart';
+import '../views/LoginScreen.dart';
 
 class AppRoutes {
   // Route names constants
@@ -18,7 +19,7 @@ class AppRoutes {
       splash: (context) => const SplashScreen(),
       onboarding: (context) => const OnboardingScreen(), 
       languageSelection: (context) => const LanguageSelectionScreen(),
-      // login: (context) => const LoginScreen(),
+       login: (context) => const LoginScreen(),
       // home: (context) => const HomeScreen(),
     };
   }
