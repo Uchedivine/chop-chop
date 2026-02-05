@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'utils/AppTheme.dart';
 import 'routes/AppRoutes.dart';
 import 'viewmodels/OnboardingViewModel.dart';
+import 'viewmodels/LanguageViewModel.dart';
+import 'viewmodels/ThemeViewModel.dart';
 
 void main() {
   runApp(const ChopChopApp());
@@ -15,20 +17,28 @@ class ChopChopApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // Add OnboardingViewModel provider
         ChangeNotifierProvider(create: (_) => OnboardingViewModel()),
-        // Add other ViewModels here as you create them
+        ChangeNotifierProvider(create: (_) => LanguageViewModel()),
+        ChangeNotifierProvider(create: (_) => ThemeViewModel()),
       ],
-      child: MaterialApp(
-        title: 'Chop Chop',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        
-        // Set the initial route to Splash
-        initialRoute: AppRoutes.splash,
-        // Pass the routes map from our helper class
-        routes: AppRoutes.getRoutes(),
+      // WRAP MaterialApp with Consumer to listen for changes
+      child: Consumer<ThemeViewModel>(
+        builder: (context, themeViewModel, child) {
+          return MaterialApp(
+            title: 'Chop Chop',
+            debugShowCheckedModeBanner: false,
+            
+            // 1. Bind the current theme mode to the ViewModel
+            themeMode: themeViewModel.themeMode, 
+            
+            // 2. Define your themes
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            
+            initialRoute: AppRoutes.splash,
+            routes: AppRoutes.getRoutes(),
+          );
+        },
       ),
     );
   }

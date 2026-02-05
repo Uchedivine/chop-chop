@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import '../views/SplashScreen.dart';
 import '../views/OnboardingScreens.dart';
+import '../views/LanguageSelectionScreen.dart';
 
 class AppRoutes {
   // Route names constants
   static const String splash = '/';
   static const String onboarding = '/onboarding';
+  static const String languageSelection = '/language-selection';
   static const String login = '/login';
   static const String register = '/register';
   static const String home = '/home';
@@ -15,6 +17,7 @@ class AppRoutes {
     return {
       splash: (context) => const SplashScreen(),
       onboarding: (context) => const OnboardingScreen(), 
+      languageSelection: (context) => const LanguageSelectionScreen(),
       // login: (context) => const LoginScreen(),
       // home: (context) => const HomeScreen(),
     };
