@@ -6,6 +6,7 @@ import 'viewmodels/OnboardingViewModel.dart';
 import 'viewmodels/LanguageViewModel.dart';
 import 'viewmodels/ThemeViewModel.dart';
 import 'viewmodels/LoginViewModel.dart';
+import 'viewmodels/OTPViewModel.dart';
 
 void main() {
   runApp(const ChopChopApp());
@@ -22,22 +23,23 @@ class ChopChopApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LanguageViewModel()),
         ChangeNotifierProvider(create: (_) => ThemeViewModel()),
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => OTPViewModel()),
       ],
-      // WRAP MaterialApp with Consumer to listen for changes
+      // Listens for theme changes to rebuild the app
       child: Consumer<ThemeViewModel>(
         builder: (context, themeViewModel, child) {
           return MaterialApp(
             title: 'Chop Chop',
             debugShowCheckedModeBanner: false,
             
-            // 1. Bind the current theme mode to the ViewModel
+            // Theme configuration
             themeMode: themeViewModel.themeMode, 
-            
-            // 2. Define your themes
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             
+            // Navigation configuration
             initialRoute: AppRoutes.splash,
+            // Reverted to use the routes map for named route support
             routes: AppRoutes.getRoutes(),
           );
         },
