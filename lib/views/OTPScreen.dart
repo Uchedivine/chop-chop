@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../viewmodels/OTPViewModel.dart';
 import '../viewmodels/ThemeViewModel.dart';
 import '../widgets/PrimaryButton.dart';
+import '../routes/AppRoutes.dart';
 
 class OTPScreen extends StatelessWidget {
   final String destination;
@@ -69,9 +70,13 @@ class OTPScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             PrimaryButton(
-              text: "Enter Code",
-              onPressed: () => otpVM.verifyCode(context),
-            ),
+  text: "Enter Code",
+  onPressed: () {
+    // We use navigateToAndRemoveUntil to clear the OTP/Login stack
+    // so the user can't "go back" to verification after succeeding.
+    AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.locationMap);
+  },
+),
             const SizedBox(height: 40),
           ],
         ),

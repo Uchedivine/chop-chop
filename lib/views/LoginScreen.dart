@@ -63,37 +63,42 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 32),
 
               // Input Field
-             TextField(
-  controller: _inputController,
-  keyboardType: loginVM.selectedMethod == LoginMethod.phone 
-      ? TextInputType.number 
-      : TextInputType.emailAddress,
-  style: TextStyle(color: themeVM.isDarkMode ? Colors.white : Colors.black),
-  // Strict 11-digit enforcement
-  inputFormatters: loginVM.selectedMethod == LoginMethod.phone 
-      ? [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(11),
-        ]
-      : [],
-  decoration: InputDecoration(
-    hintText: loginVM.selectedMethod == LoginMethod.phone 
-        ? "01234567899" // Example of the 11-digit format
-        : "example@mail.com",
-    // Adding the fixed prefix for phone mode
-    prefixText: loginVM.selectedMethod == LoginMethod.phone ? "+234 " : null,
-    prefixStyle: TextStyle(
-      color: themeVM.isDarkMode ? Colors.white70 : Colors.black87,
-      fontWeight: FontWeight.bold,
-    ),
-    errorText: loginVM.errorMessage,
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-  ),
-),
+              TextField(
+                controller: _inputController,
+                keyboardType: loginVM.selectedMethod == LoginMethod.phone
+                    ? TextInputType.number
+                    : TextInputType.emailAddress,
+                style: TextStyle(
+                    color: themeVM.isDarkMode ? Colors.white : Colors.black),
+                // Strict 11-digit enforcement
+                inputFormatters: loginVM.selectedMethod == LoginMethod.phone
+                    ? [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(11),
+                      ]
+                    : [],
+                decoration: InputDecoration(
+                  hintText: loginVM.selectedMethod == LoginMethod.phone
+                      ? "01234567899" // Example of the 11-digit format
+                      : "example@mail.com",
+                  // Adding the fixed prefix for phone mode
+                  prefixText: loginVM.selectedMethod == LoginMethod.phone
+                      ? "+234 "
+                      : null,
+                  prefixStyle: TextStyle(
+                    color: themeVM.isDarkMode ? Colors.white70 : Colors.black87,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  errorText: loginVM.errorMessage,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
               const SizedBox(height: 24),
 
               PrimaryButton(
                 text: "Continue",
+                isLoading: loginVM.isLoading,
                 // Passing logic to ViewModel
                 onPressed: () =>
                     loginVM.handleContinue(_inputController.text, context),

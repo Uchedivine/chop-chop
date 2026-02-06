@@ -50,11 +50,10 @@ class OnboardingViewModel extends ChangeNotifier {
     }
   }
 
-  void completeOnboarding(BuildContext context) {
-    // Navigate to Login using the named route we defined
-    // We use navigateToReplacement so the user can't go back to onboarding
-    AppRoutes.navigateToReplacement(context, AppRoutes.login);
-  }
+ void completeOnboarding(BuildContext context) {
+  // Change AppRoutes.login to AppRoutes.languageSelection
+  AppRoutes.navigateToReplacement(context, AppRoutes.languageSelection);
+}
 
   @override
   void dispose() {

@@ -1,6 +1,7 @@
 // lib/viewmodels/LanguageViewModel.dart
 import 'package:flutter/material.dart';
 import '../models/LanguageModel.dart';
+import '../routes/AppRoutes.dart';
 
 class LanguageViewModel extends ChangeNotifier {
   int _selectedIndex = 0; // Default to English
@@ -25,6 +26,6 @@ void confirmSelection(BuildContext context) {
 
     // 2. Navigate to Login Screen
     // We use navigateToReplacement so they can't "back" into the language selector
-    //AppRoutes.navigateToReplacement(context, AppRoutes.login);
+    Navigator.pushNamed(context, AppRoutes.login);
   }
 }

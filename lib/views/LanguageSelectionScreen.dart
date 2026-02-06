@@ -122,7 +122,8 @@ class LanguageSelectionScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: PrimaryButton(
                   text: "Select",
-                  onPressed: () => viewModel.confirmSelection(context),
+                  onPressed: () { Navigator.pushNamed(context, '/login'); 
+  },
                 ),
               ),
             ],
