@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/SecondaryButton.dart';
+import '../routes/AppRoutes.dart'; 
 
 class RestaurantPreferenceScreen extends StatefulWidget {
   const RestaurantPreferenceScreen({super.key});
@@ -100,16 +101,29 @@ class _RestaurantPreferenceScreenState extends State<RestaurantPreferenceScreen>
             ),
 
             // Reuse our modular buttons
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: Column(
-                children: [
-                  PrimaryButton(text: "Continue", onPressed: () { /* Next: Register */ }),
-                  const SizedBox(height: 12),
-                  SecondaryButton(text: "Skip", onPressed: () { /* Next: Register */ }),
-                ],
-              ),
-            ),
+           // Inside the Column at the bottom of RestaurantPreferenceScreen
+Padding(
+  padding: const EdgeInsets.only(bottom: 20.0),
+  child: Column(
+    children: [
+      PrimaryButton(
+        text: "Continue", 
+        onPressed: () {
+          // Standardizing with AppRoutes constant
+          AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.home);
+        }
+      ),
+      const SizedBox(height: 12),
+      SecondaryButton(
+        text: "Skip", 
+        onPressed: () {
+          // Both paths lead to the dashboard
+          AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.home);
+        }
+      ),
+    ],
+  ),
+),
           ],
         ),
       ),
