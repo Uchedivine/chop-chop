@@ -8,6 +8,7 @@ import '../views/LocationMapScreen.dart';
 import '../views/AddressDetailsScreen.dart'; 
 import '../views/FoodPreferenceScreen.dart'; 
 import '../views/RestaurantPreferenceScreen.dart';
+import '../views/HomeScreen.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -37,6 +38,7 @@ class AppRoutes {
       addressDetails: (context) => const AddressDetailsScreen(),
       foodPreference: (context) => const FoodPreferenceScreen(), 
       restaurantPreference: (context) => const RestaurantPreferenceScreen(),
+      home: (context) => const HomeScreen(),
     };
   }
 
