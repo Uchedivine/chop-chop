@@ -9,6 +9,7 @@ import 'viewmodels/LoginViewModel.dart';
 import 'viewmodels/OTPViewModel.dart';
 import 'viewmodels/LocationViewModel.dart';
 import 'viewmodels/home_view_model.dart';
+import 'viewmodels/SearchViewModel.dart';
 
 void main() {
   runApp(const ChopChopApp());
@@ -28,6 +29,7 @@ class ChopChopApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OTPViewModel()),
         ChangeNotifierProvider(create: (_) => LocationViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => SearchViewModel()),
       ],
       // Listens for theme changes to rebuild the app
       child: Consumer<ThemeViewModel>(
