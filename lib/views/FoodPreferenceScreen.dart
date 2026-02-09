@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/PrimaryButton.dart';
-import '../widgets/SecondaryButton.dart'; // Ensure this is imported
+import '../widgets/SecondaryButton.dart'; 
+import '../routes/AppRoutes.dart'; 
 
 class FoodPreferenceScreen extends StatefulWidget {
   const FoodPreferenceScreen({super.key});
@@ -127,16 +128,12 @@ class _FoodPreferenceScreenState extends State<FoodPreferenceScreen> {
                 children: [
                   PrimaryButton(
                     text: "Continue",
-                    onPressed: () {
-                      // Logic for next screen
-                    },
+                   onPressed: () => AppRoutes.navigateTo(context, AppRoutes.restaurantPreference),
                   ),
                   const SizedBox(height: 12),
                   SecondaryButton(
                     text: "Skip",
-                    onPressed: () {
-                      // Skip logic
-                    },
+              onPressed: () => AppRoutes.navigateTo(context, AppRoutes.restaurantPreference),
                   ),
                 ],
               ),
