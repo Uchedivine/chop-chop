@@ -18,19 +18,48 @@ class HomeViewModel extends ChangeNotifier {
 
   // Popular Restaurants
   final List<Map<String, dynamic>> restaurants = [
+     {
+      'name': '330 Eats',
+      'image': 'assets/images/330eats.png',
+      'time': '10 - 15 mins',
+      'rating': '5.0',
+      'price': '800'
+    },
+    {
+      'name': 'Mega Chicken',
+      'image': 'assets/images/mega_chicken.png',
+      'time': '10 - 15 mins',
+      'rating': '5.0',
+      'price': '8000'
+    },
+    {
+      'name': 'Prisca Sharwama',
+      'image': 'assets/images/prisca_sharwama.png',
+      'time': '10 - 15 mins',
+      'rating': '5.0',
+      'price': '3500'
+    },
+    {
+      'name': 'Godbless Chicken & Chips',
+      'image': 'assets/images/godbless_chicken_chips.png',
+      'time': '10 - 15 mins',
+      'rating': '5.0',
+      'price': '800'
+    },
     {
       'name': 'Chicken Republic',
       'image': 'assets/images/chicken_rep.png',
       'time': '15 - 20 mins',
       'rating': '4.5',
-      'price': 'N1,000'
+      'price': '1,000'
     },
     {
       'name': 'Burger King',
       'image': 'assets/images/burger_king.png',
       'time': '10 - 15 mins',
       'rating': '5.0',
-      'price': 'N800'
+      'price': '4000'
     },
+   
   ];
 }
