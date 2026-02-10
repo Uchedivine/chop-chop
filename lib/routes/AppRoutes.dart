@@ -11,6 +11,7 @@ import '../views/RestaurantPreferenceScreen.dart';
 import '../views/HomeScreen.dart';
 import '../views/SearchScreen.dart';
 import '../views/NotificationsScreen.dart';
+import '../views/RestaurantDetailsScreen.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -26,6 +27,7 @@ class AppRoutes {
   static const String home = '/home';
   static const String searchRoute = '/search';
   static const String notifications = '/notifications';
+  static const String restaurantDetails = '/restaurant-details';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -45,6 +47,7 @@ class AppRoutes {
       home: (context) => const HomeScreen(),
       searchRoute: (context) => const SearchScreen(),
       notifications: (context) => const NotificationsScreen(),
+      restaurantDetails: (context) => const RestaurantDetailsScreen(),
     };
   }
 

@@ -234,18 +234,29 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: restaurants.length,
         itemBuilder: (context, index) {
           final data = restaurants[index];
-          return RestaurantCard(
-            image: data['image'],
-            name: data['name'],
-            rating: data['rating'],
-            price: data['price'] ?? "1,000",
-            time: data['time'] ?? "15-20 min",
-            isFavorite: data['isFavorite'] ?? false,
-            onFavoriteToggle: () {
-              setState(() {
-                data['isFavorite'] = !(data['isFavorite'] ?? false);
-              });
+
+          return GestureDetector(
+            onTap: () {
+              // Navigates to the details page and passes the restaurant map as arguments
+              Navigator.pushNamed(
+                context,
+                AppRoutes.restaurantDetails,
+                arguments: data,
+              );
             },
+            child: RestaurantCard(
+              image: data['image'],
+              name: data['name'],
+              rating: data['rating'],
+              price: data['price'] ?? "1,000",
+              time: data['time'] ?? "15-20 min",
+              isFavorite: data['isFavorite'] ?? false,
+              onFavoriteToggle: () {
+                setState(() {
+                  data['isFavorite'] = !(data['isFavorite'] ?? false);
+                });
+              },
+            ),
           );
         },
       ),
