@@ -5,11 +5,12 @@ import '../views/LanguageSelectionScreen.dart';
 import '../views/LoginScreen.dart';
 import '../views/OTPScreen.dart';
 import '../views/LocationMapScreen.dart';
-import '../views/AddressDetailsScreen.dart'; 
-import '../views/FoodPreferenceScreen.dart'; 
+import '../views/AddressDetailsScreen.dart';
+import '../views/FoodPreferenceScreen.dart';
 import '../views/RestaurantPreferenceScreen.dart';
 import '../views/HomeScreen.dart';
 import '../views/SearchScreen.dart';
+import '../views/NotificationsScreen.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -24,6 +25,7 @@ class AppRoutes {
   static const String register = '/register';
   static const String home = '/home';
   static const String searchRoute = '/search';
+  static const String notifications = '/notifications';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -33,21 +35,23 @@ class AppRoutes {
       login: (context) => const LoginScreen(),
       otp: (context) {
         final args = ModalRoute.of(context)?.settings.arguments;
-        final String destination = args is String ? args : "User"; 
+        final String destination = args is String ? args : "User";
         return OTPScreen(destination: destination);
       },
       locationMap: (context) => const LocationMapScreen(),
       addressDetails: (context) => const AddressDetailsScreen(),
-      foodPreference: (context) => const FoodPreferenceScreen(), 
+      foodPreference: (context) => const FoodPreferenceScreen(),
       restaurantPreference: (context) => const RestaurantPreferenceScreen(),
       home: (context) => const HomeScreen(),
       searchRoute: (context) => const SearchScreen(),
+      notifications: (context) => const NotificationsScreen(),
     };
   }
 
   // --- Navigation Helpers ---
 
-  static void navigateTo(BuildContext context, String routeName, {Object? arguments}) {
+  static void navigateTo(BuildContext context, String routeName,
+      {Object? arguments}) {
     Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 

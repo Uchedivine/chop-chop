@@ -51,11 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
               _buildSectionHeader("Categories"),
               _buildCategoryList(homeVM.categories),
               _buildSectionHeader("Popular Restaurants", showSeeAll: true),
-              _buildRestaurantList(
-                  homeVM.restaurants), 
+              _buildRestaurantList(homeVM.restaurants),
               _buildSectionHeader("Fastest Deliveries", showSeeAll: true),
-              _buildRestaurantList(
-                  homeVM.restaurants), 
+              _buildRestaurantList(homeVM.restaurants),
               const SizedBox(height: 30),
             ],
           ),
@@ -103,7 +101,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           _buildHeaderIcon(Icons.shopping_cart_outlined, count: "3"),
           const SizedBox(width: 15),
-          _buildHeaderIcon(Icons.notifications_none, count: "5"),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.notifications);
+            },
+            child: _buildHeaderIcon(Icons.notifications_none, count: "5"),
+          ),
         ],
       ),
     );
@@ -134,33 +137,33 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
- Widget _buildSearchBar(BuildContext context) { 
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    child: GestureDetector(
-      onTap: () {
-        // Now using the centralized Named Route for a cleaner MVVM architecture
-        Navigator.pushNamed(context, AppRoutes.searchRoute);
-      },
-      child: AbsorbPointer( 
-        // AbsorbPointer is key here: it lets the GestureDetector catch the tap 
-        // instead of the TextField trying to focus/open the keyboard.
-        child: TextField(
-          decoration: InputDecoration(
-            hintText: "Wetin you want chop today?",
-            prefixIcon: const Icon(Icons.search, color: Colors.grey),
-            filled: true,
-            fillColor: const Color(0xFFF3F4F6),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15), 
-              borderSide: BorderSide.none,
+  Widget _buildSearchBar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: GestureDetector(
+        onTap: () {
+          // Now using the centralized Named Route for a cleaner MVVM architecture
+          Navigator.pushNamed(context, AppRoutes.searchRoute);
+        },
+        child: AbsorbPointer(
+          // AbsorbPointer is key here: it lets the GestureDetector catch the tap
+          // instead of the TextField trying to focus/open the keyboard.
+          child: TextField(
+            decoration: InputDecoration(
+              hintText: "Wetin you want chop today?",
+              prefixIcon: const Icon(Icons.search, color: Colors.grey),
+              filled: true,
+              fillColor: const Color(0xFFF3F4F6),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide.none,
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildBannerCarousel(List<String> banners) {
     return Column(
