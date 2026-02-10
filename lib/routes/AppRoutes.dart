@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/MenuItem.dart';
 import '../views/SplashScreen.dart';
 import '../views/OnboardingScreens.dart';
 import '../views/LanguageSelectionScreen.dart';
@@ -12,6 +13,7 @@ import '../views/HomeScreen.dart';
 import '../views/SearchScreen.dart';
 import '../views/NotificationsScreen.dart';
 import '../views/RestaurantDetailsScreen.dart';
+import '../views/FoodDetailsScreen.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -28,6 +30,7 @@ class AppRoutes {
   static const String searchRoute = '/search';
   static const String notifications = '/notifications';
   static const String restaurantDetails = '/restaurant-details';
+  static const String foodDetailsRoute = '/food-details';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -48,6 +51,7 @@ class AppRoutes {
       searchRoute: (context) => const SearchScreen(),
       notifications: (context) => const NotificationsScreen(),
       restaurantDetails: (context) => const RestaurantDetailsScreen(),
+      foodDetailsRoute: (context) => const FoodDetailsScreen(),
     };
   }
 
@@ -68,5 +72,9 @@ class AppRoutes {
 
   static void navigateToOtp(BuildContext context, String destination) {
     navigateTo(context, otp, arguments: destination);
+  }
+
+  static void navigateToFoodDetails(BuildContext context, MenuItem item) {
+    navigateTo(context, foodDetailsRoute, arguments: item);
   }
 }
