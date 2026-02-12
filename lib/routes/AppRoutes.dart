@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Required for ChangeNotifierProvider
 import '../models/MenuItem.dart';
 import '../viewmodels/CartViewModel.dart';
+import '../viewmodels/CheckoutViewModel.dart'; // Ensure this is imported
 import '../views/SplashScreen.dart';
 import '../views/OnboardingScreens.dart';
 import '../views/LanguageSelectionScreen.dart';
@@ -15,8 +17,9 @@ import '../views/SearchScreen.dart';
 import '../views/NotificationsScreen.dart';
 import '../views/RestaurantDetailsScreen.dart';
 import '../views/FoodDetailsScreen.dart';
-import '../views/CartScreen.dart'; 
+import '../views/CartScreen.dart';
 import '../views/OrderSummaryScreen.dart';
+import '../views/CheckoutScreen.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -36,6 +39,7 @@ class AppRoutes {
   static const String foodDetailsRoute = '/food-details';
   static const String cart = '/cart';
   static const String orderSummary = '/order-summary';
+  static const String checkout = '/checkout';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -56,20 +60,26 @@ class AppRoutes {
       searchRoute: (context) => const SearchScreen(),
       notifications: (context) => const NotificationsScreen(),
       restaurantDetails: (context) => const RestaurantDetailsScreen(),
-      
-      // FIX 1: Access arguments without using a named parameter 'item' 
-      // if FoodDetailsScreen doesn't define it in its constructor.
       foodDetailsRoute: (context) => const FoodDetailsScreen(),
-      
       cart: (context) => const CartScreen(),
-      
-      // FIX 2: Correctly extracting required named parameters for OrderSummaryScreen
+
       orderSummary: (context) {
         final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-
         return OrderSummaryScreen(
           restaurantName: args?['restaurantName'] ?? "Unknown Restaurant",
           restaurantItems: args?['restaurantItems'] ?? <CartItem>[],
+        );
+      },
+
+      checkout: (context) {
+        final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+        return ChangeNotifierProvider(
+          create: (_) => CheckoutViewModel(),
+          child: CheckoutScreen(
+            restaurantName: args?['restaurantName'] ?? "Unknown",
+            subtotal: args?['subtotal'] ?? 0.0,
+            deliveryAddress: args?['deliveryAddress'], // Pass dynamic address to the View
+          ),
         );
       },
     };
@@ -99,11 +109,24 @@ class AppRoutes {
 
   static void navigateToOrderSummary(BuildContext context, String name, List<CartItem> items) {
     navigateTo(
-      context, 
-      orderSummary, 
+      context,
+      orderSummary,
       arguments: {
         'restaurantName': name,
         'restaurantItems': items,
+      },
+    );
+  }
+
+  // UPDATED: Added address parameter to ensure Checkout reflects the current user location
+  static void navigateToCheckout(BuildContext context, String name, double total, String address) {
+    navigateTo(
+      context,
+      checkout,
+      arguments: {
+        'restaurantName': name,
+        'subtotal': total,
+        'deliveryAddress': address,
       },
     );
   }
