@@ -4,6 +4,8 @@ import '../viewmodels/LocationViewModel.dart';
 import '../viewmodels/home_view_model.dart';
 import '../widgets/CategoryItem.dart';
 import '../widgets/RestaurantCard.dart';
+import '../views/SearchScreen.dart';
+import '../routes/AppRoutes.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(locationVM.currentAddress),
-              _buildSearchBar(),
+              _buildSearchBar(context),
               const SizedBox(height: 20),
               _buildBannerCarousel(homeVM.banners),
               _buildSectionHeader("Categories"),
@@ -132,23 +134,33 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: "Wetin you want chop today?",
-          hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-          filled: true,
-          fillColor: const Color(0xFFF3F4F6),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide.none),
+ Widget _buildSearchBar(BuildContext context) { 
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    child: GestureDetector(
+      onTap: () {
+        // Now using the centralized Named Route for a cleaner MVVM architecture
+        Navigator.pushNamed(context, AppRoutes.searchRoute);
+      },
+      child: AbsorbPointer( 
+        // AbsorbPointer is key here: it lets the GestureDetector catch the tap 
+        // instead of the TextField trying to focus/open the keyboard.
+        child: TextField(
+          decoration: InputDecoration(
+            hintText: "Wetin you want chop today?",
+            prefixIcon: const Icon(Icons.search, color: Colors.grey),
+            filled: true,
+            fillColor: const Color(0xFFF3F4F6),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15), 
+              borderSide: BorderSide.none,
+            ),
+          ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildBannerCarousel(List<String> banners) {
     return Column(
