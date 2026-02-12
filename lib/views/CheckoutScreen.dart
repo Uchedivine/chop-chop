@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/CheckoutViewModel.dart';
-import '../routes/AppRoutes.dart'; // Added AppRoutes import
+import '../routes/AppRoutes.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final String restaurantName;
@@ -25,7 +25,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize the ViewModel with the passed subtotal and the dynamic address
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final vm = Provider.of<CheckoutViewModel>(context, listen: false);
       vm.initialize(widget.subtotal, widget.deliveryAddress);
@@ -72,9 +71,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: Colors.grey)),
                 const SizedBox(height: 20),
                 
-                // --- Delivery Address Section ---
                 _buildSectionHeader("Delivery Address", onChange: () {
-                  // TODO: Navigate to Address Selection if needed
+                  // Address logic placeholder
                 }),
                 const SizedBox(height: 10),
                 Container(
@@ -84,7 +82,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   child: Column(
                     children: [
-                      // Map Placeholder
                       Container(
                         height: 100,
                         width: double.infinity,
@@ -115,15 +112,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                 const SizedBox(height: 25),
 
-                // --- Payment Method ---
-                // UPDATED: Added navigation logic to the Change button
                 _buildSectionHeader("Payment Method", onChange: () async {
-                  final selected = await Navigator.pushNamed(
-                    context, 
-                    AppRoutes.paymentMethods, 
-                    arguments: vm.paymentMethod
-                  );
-
+                  final selected = await AppRoutes.navigateToPaymentMethods(context, vm.paymentMethod);
                   if (selected != null && selected is String) {
                     vm.updatePaymentMethod(selected);
                   }
@@ -137,7 +127,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   child: Row(
                     children: [
-                      // Dynamic Icon based on method (Simplified logic)
                       Icon(
                         vm.paymentMethod.contains("Cash") ? Icons.handshake : Icons.credit_card, 
                         color: vm.paymentMethod.contains("Cash") ? Colors.green : Colors.blue, 
@@ -153,7 +142,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                 const SizedBox(height: 25),
 
-                // --- Voucher ---
                 const Text("Voucher", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 const SizedBox(height: 10),
                 Row(
@@ -190,7 +178,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                 const SizedBox(height: 25),
 
-                // --- Tip Rider ---
                 const Text("Tip Rider", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 const SizedBox(height: 5),
                 const Text("All tips go directly to the delivery rider.", style: TextStyle(color: Colors.grey, fontSize: 11)),
@@ -224,7 +211,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                 const SizedBox(height: 30),
 
-                // --- Footer Totals ---
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -255,7 +241,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         height: 55,
                         child: ElevatedButton(
                           onPressed: () {
-                            // TODO: Implement Payment Gateway Integration
+                            // Navigating to Order Success with dynamic data
+                            AppRoutes.navigateToOrderSuccess(
+                              context, 
+                              widget.restaurantName, 
+                              "₦${vm.totalAmount.toStringAsFixed(0)}", 
+                              vm.deliveryAddress
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFF9431),

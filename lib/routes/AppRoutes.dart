@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../models/MenuItem.dart';
 import '../viewmodels/CartViewModel.dart';
 import '../viewmodels/CheckoutViewModel.dart';
+import '../viewmodels/OrderSuccessViewModel.dart';
+import '../viewmodels/TrackOrderViewModel.dart'; // Added
 import '../views/SplashScreen.dart';
 import '../views/OnboardingScreens.dart';
 import '../views/LanguageSelectionScreen.dart';
@@ -20,7 +22,9 @@ import '../views/FoodDetailsScreen.dart';
 import '../views/CartScreen.dart';
 import '../views/OrderSummaryScreen.dart';
 import '../views/CheckoutScreen.dart';
-import '../views/PaymentMethodsScreen.dart'; // Fixed missing semicolon
+import '../views/PaymentMethodsScreen.dart';
+import '../views/OrderSuccessScreen.dart';
+import '../views/TrackOrderScreen.dart'; // Added
 
 class AppRoutes {
   static const String splash = '/';
@@ -42,6 +46,8 @@ class AppRoutes {
   static const String orderSummary = '/order-summary';
   static const String checkout = '/checkout';
   static const String paymentMethods = '/payment-methods';
+  static const String orderSuccess = '/order-success';
+  static const String trackOrder = '/track-order'; // Added
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -85,10 +91,33 @@ class AppRoutes {
         );
       },
 
-      // ADDED: Payment Methods Route
       paymentMethods: (context) {
         final currentMethod = ModalRoute.of(context)?.settings.arguments as String? ?? "Credit/Debit Card";
         return PaymentMethodsScreen(currentMethod: currentMethod);
+      },
+
+      orderSuccess: (context) {
+        final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+        return ChangeNotifierProvider(
+          create: (_) => OrderSuccessViewModel(),
+          child: OrderSuccessScreen(
+            restaurantName: args['restaurantName'],
+            totalExpense: args['totalExpense'],
+            deliveryAddress: args['deliveryAddress'],
+          ),
+        );
+      },
+
+      // Added Track Order Route
+      trackOrder: (context) {
+        final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+        return ChangeNotifierProvider(
+          create: (_) => TrackOrderViewModel(),
+          child: TrackOrderScreen(
+            deliveryAddress: args['deliveryAddress'],
+            estimatedTime: args['estimatedTime'],
+          ),
+        );
       },
     };
   }
@@ -99,9 +128,24 @@ class AppRoutes {
     Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 
-  // UPDATED: Helper to return selected payment method
   static Future<dynamic> navigateToPaymentMethods(BuildContext context, String currentMethod) {
     return Navigator.pushNamed(context, paymentMethods, arguments: currentMethod);
+  }
+
+  static void navigateToOrderSuccess(BuildContext context, String name, String total, String address) {
+    navigateTo(context, orderSuccess, arguments: {
+      'restaurantName': name,
+      'totalExpense': total,
+      'deliveryAddress': address,
+    });
+  }
+
+  // Added Track Order Helper
+  static void navigateToTrackOrder(BuildContext context, String address, String time) {
+    navigateTo(context, trackOrder, arguments: {
+      'deliveryAddress': address,
+      'estimatedTime': time,
+    });
   }
 
   static void navigateToReplacement(BuildContext context, String routeName) {
@@ -121,25 +165,17 @@ class AppRoutes {
   }
 
   static void navigateToOrderSummary(BuildContext context, String name, List<CartItem> items) {
-    navigateTo(
-      context,
-      orderSummary,
-      arguments: {
-        'restaurantName': name,
-        'restaurantItems': items,
-      },
-    );
+    navigateTo(context, orderSummary, arguments: {
+      'restaurantName': name,
+      'restaurantItems': items,
+    });
   }
 
   static void navigateToCheckout(BuildContext context, String name, double total, String address) {
-    navigateTo(
-      context,
-      checkout,
-      arguments: {
-        'restaurantName': name,
-        'subtotal': total,
-        'deliveryAddress': address,
-      },
-    );
+    navigateTo(context, checkout, arguments: {
+      'restaurantName': name,
+      'subtotal': total,
+      'deliveryAddress': address,
+    });
   }
 }
