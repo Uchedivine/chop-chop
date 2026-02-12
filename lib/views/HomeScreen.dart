@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/LocationViewModel.dart';
 import '../viewmodels/home_view_model.dart';
+import '../viewmodels/CartViewModel.dart'; // Added CartViewModel
 import '../widgets/CategoryItem.dart';
 import '../widgets/RestaurantCard.dart';
 import '../views/SearchScreen.dart';
@@ -35,6 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final locationVM = Provider.of<LocationViewModel>(context);
     final homeVM = Provider.of<HomeViewModel>(context);
+    // Listen to the CartViewModel to update the counter badge in real-time
+    final cartVM = Provider.of<CartViewModel>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -44,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(locationVM.currentAddress),
+              _buildHeader(context, locationVM.currentAddress, cartVM),
               _buildSearchBar(context),
               const SizedBox(height: 20),
               _buildBannerCarousel(homeVM.banners),
@@ -64,15 +67,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // --- 1:1 UI Helper Widgets ---
 
-  Widget _buildHeader(String address) {
+  Widget _buildHeader(BuildContext context, String address, CartViewModel cartVM) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: Colors.orange.withOpacity(0.1),
-            child:
-                const Icon(Icons.location_on, color: Colors.orange, size: 20),
+            child: const Icon(Icons.location_on, color: Colors.orange, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -99,7 +101,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          _buildHeaderIcon(Icons.shopping_cart_outlined, count: "3"),
+          // --- Updated Cart Icon with Navigation ---
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.cart);
+            },
+            child: _buildHeaderIcon(
+              Icons.shopping_cart_outlined, 
+              // Passing the actual count from the ViewModel
+              // If cart is empty, we pass null so the badge is hidden
+              count: cartVM.items.isEmpty ? null : cartVM.items.length.toString(),
+            ),
+          ),
           const SizedBox(width: 15),
           GestureDetector(
             onTap: () {
@@ -114,23 +127,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildHeaderIcon(IconData icon, {String? count}) {
     return Stack(
+      clipBehavior: Clip.none, // Allows the badge to sit slightly outside the icon frame
       children: [
         Icon(icon, color: Colors.black87),
         if (count != null)
           Positioned(
-            right: 0,
-            top: 0,
+            right: -4,
+            top: -4,
             child: Container(
               padding: const EdgeInsets.all(2),
               decoration: const BoxDecoration(
                   color: Colors.red, shape: BoxShape.circle),
-              constraints: const BoxConstraints(minWidth: 12, minHeight: 12),
-              child: Text(count,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 8,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center),
+              constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
+              child: Text(
+                count,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 8,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
       ],
@@ -142,12 +158,9 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GestureDetector(
         onTap: () {
-          // Now using the centralized Named Route for a cleaner MVVM architecture
           Navigator.pushNamed(context, AppRoutes.searchRoute);
         },
         child: AbsorbPointer(
-          // AbsorbPointer is key here: it lets the GestureDetector catch the tap
-          // instead of the TextField trying to focus/open the keyboard.
           child: TextField(
             decoration: InputDecoration(
               hintText: "Wetin you want chop today?",
@@ -237,7 +250,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return GestureDetector(
             onTap: () {
-              // Navigates to the details page and passes the restaurant map as arguments
               Navigator.pushNamed(
                 context,
                 AppRoutes.restaurantDetails,
@@ -270,8 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title,
-              style:
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           if (showSeeAll)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -297,19 +308,14 @@ class _HomeScreenState extends State<HomeScreen> {
       selectedItemColor: Colors.orange,
       unselectedItemColor: Colors.grey,
       showUnselectedLabels: true,
-      selectedLabelStyle:
-          const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+      selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
       unselectedLabelStyle: const TextStyle(fontSize: 10),
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: "Home"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_outlined), label: "Orders"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline), label: "Support"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border), label: "Favorites"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline), label: "Profile"),
+        BottomNavigationBarItem(icon: Icon(Icons.assignment_outlined), label: "Orders"),
+        BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: "Support"),
+        BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: "Favorites"),
+        BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: "Profile"),
       ],
     );
   }

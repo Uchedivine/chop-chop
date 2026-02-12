@@ -248,19 +248,36 @@ class RestaurantDetailsScreen extends StatelessWidget {
     );
   }
 
-Widget _buildMenuItemTile(BuildContext context, MenuItem item) { // Added context parameter
+Widget _buildMenuItemTile(BuildContext context, MenuItem item) {
+  // Access the ViewModel to get the restaurant-specific info
+  final vm = Provider.of<RestaurantDetailsViewModel>(context, listen: false);
+
   return GestureDetector(
     onTap: () {
-      // Navigates to the food details page and passes the item model
+      // 1. Create a "complete" version of the item that knows which restaurant it belongs to
+      final itemWithRestaurant = MenuItem(
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        image: item.image,
+        category: item.category,
+        discount: item.discount,
+        // Pulling these from the VM's restaurantData
+        restaurantName: vm.restaurantData?['name'] ?? "3:30 Eatries",
+        restaurantIcon: vm.getRestaurantLogo(),
+        deliveryTime: vm.restaurantData?['time'] ?? "20 min",
+      );
+
+      // 2. Pass this complete item to the Food Details page
       Navigator.pushNamed(
         context, 
         AppRoutes.foodDetailsRoute, 
-        arguments: item,
+        arguments: itemWithRestaurant,
       );
     },
     child: Container(
       padding: const EdgeInsets.all(20),
-      color: Colors.transparent, // Ensures the entire area is tappable
+      color: Colors.transparent, 
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

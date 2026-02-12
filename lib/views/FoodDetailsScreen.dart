@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/MenuItem.dart';
 import '../viewmodels/FoodDetailsViewModel.dart';
+import '../viewmodels/CartViewModel.dart';
 
 class FoodDetailsScreen extends StatelessWidget {
   const FoodDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final MenuItem item = ModalRoute.of(context)!.settings.arguments as MenuItem;
+    final MenuItem item =
+        ModalRoute.of(context)!.settings.arguments as MenuItem;
 
     return ChangeNotifierProvider(
       create: (_) => FoodDetailsViewModel(),
@@ -30,7 +32,7 @@ class FoodDetailsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                _buildBottomAction(item, vm),
+                _buildBottomAction(context, item, vm),
               ],
             );
           },
@@ -42,7 +44,8 @@ class FoodDetailsScreen extends StatelessWidget {
   Widget _buildHeader(BuildContext context, MenuItem item) {
     return Stack(
       children: [
-        Image.asset(item.image, width: double.infinity, height: 350, fit: BoxFit.cover),
+        Image.asset(item.image,
+            width: double.infinity, height: 350, fit: BoxFit.cover),
         Positioned(
           top: 50,
           left: 20,
@@ -50,7 +53,8 @@ class FoodDetailsScreen extends StatelessWidget {
             onTap: () => Navigator.pop(context),
             child: const CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black),
+              child:
+                  Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black),
             ),
           ),
         ),
@@ -64,11 +68,17 @@ class FoodDetailsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(item.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          Text(item.name,
+              style:
+                  const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
-          Text(item.price, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+          Text(item.price,
+              style:
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
           const SizedBox(height: 15),
-          Text(item.description, style: const TextStyle(color: Colors.grey, fontSize: 14, height: 1.5)),
+          Text(item.description,
+              style: const TextStyle(
+                  color: Colors.grey, fontSize: 14, height: 1.5)),
         ],
       ),
     );
@@ -86,7 +96,8 @@ class FoodDetailsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Additional Options", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const Text("Additional Options",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 15),
           ...options.map((opt) => _optionTile(opt, vm)).toList(),
         ],
@@ -111,13 +122,16 @@ class FoodDetailsScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(opt['name']!, style: const TextStyle(fontWeight: FontWeight.w500)),
-                Text(opt['price']!, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                Text(opt['name']!,
+                    style: const TextStyle(fontWeight: FontWeight.w500)),
+                Text(opt['price']!,
+                    style: const TextStyle(color: Colors.grey, fontSize: 12)),
               ],
             ),
             Icon(
               isSelected ? Icons.check_circle : Icons.circle_outlined,
-              color: isSelected ? const Color(0xFFFF9431) : Colors.grey.shade300,
+              color:
+                  isSelected ? const Color(0xFFFF9431) : Colors.grey.shade300,
             ),
           ],
         ),
@@ -125,51 +139,69 @@ class FoodDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomAction(MenuItem item, FoodDetailsViewModel vm) {
-    return Container(
-      padding: const EdgeInsets.all(25),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5))],
-      ),
-      child: Column(
-        children: [
-          _quantitySelector(vm),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Total", style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  Text(vm.calculateTotal(item.price), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                ],
+  // Add BuildContext context here 👇
+Widget _buildBottomAction(BuildContext context, MenuItem item, FoodDetailsViewModel vm) {
+  return Container(
+    padding: const EdgeInsets.all(25),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5))],
+    ),
+    child: Column(
+      children: [
+        _quantitySelector(vm),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Total", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                Text(vm.calculateTotal(item.price), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Now 'context' is available for Provider and Navigator!
+                Provider.of<CartViewModel>(context, listen: false).addToCart(
+                  item, 
+                  vm.quantity, 
+                  vm.selectedOptions.toList()
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Added to cart!"), duration: Duration(seconds: 1))
+                );
+                
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF9431),
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF9431),
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                child: const Text("Add to Cart", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+              child: const Text("Add to Cart", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _quantitySelector(FoodDetailsViewModel vm) {
     return Container(
-      decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(
+          color: const Color(0xFFF3F4F6),
+          borderRadius: BorderRadius.circular(10)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(onPressed: vm.decrement, icon: const Icon(Icons.remove)),
-          Text("${vm.quantity}", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text("${vm.quantity}",
+              style:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           IconButton(onPressed: vm.increment, icon: const Icon(Icons.add)),
         ],
       ),
