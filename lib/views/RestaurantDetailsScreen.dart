@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/RestaurantDetailsViewModel.dart';
 import '../models/MenuItem.dart';
+import '../routes/AppRoutes.dart';
 
 class RestaurantDetailsScreen extends StatelessWidget {
   const RestaurantDetailsScreen({super.key});
@@ -89,7 +90,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                         (context, index) {
                           return Column(
                             children: [
-                              _buildMenuItemTile(vm.filteredItems[index]),
+                              _buildMenuItemTile(context, vm.filteredItems[index]),
                               const Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 20),
                                 child: Divider(height: 1, color: Color(0xFFEEEEEE)),
@@ -247,9 +248,19 @@ class RestaurantDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItemTile(MenuItem item) {
-    return Container(
+Widget _buildMenuItemTile(BuildContext context, MenuItem item) { // Added context parameter
+  return GestureDetector(
+    onTap: () {
+      // Navigates to the food details page and passes the item model
+      Navigator.pushNamed(
+        context, 
+        AppRoutes.foodDetailsRoute, 
+        arguments: item,
+      );
+    },
+    child: Container(
       padding: const EdgeInsets.all(20),
+      color: Colors.transparent, // Ensures the entire area is tappable
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -308,6 +319,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
