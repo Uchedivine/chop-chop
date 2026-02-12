@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/CheckoutViewModel.dart';
+import '../routes/AppRoutes.dart'; // Added AppRoutes import
 
 class CheckoutScreen extends StatefulWidget {
   final String restaurantName;
   final double subtotal;
-  final String? deliveryAddress; // Added to handle dynamic address passing
+  final String? deliveryAddress;
 
   const CheckoutScreen({
     super.key,
@@ -101,7 +102,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
-                                vm.deliveryAddress, // DYNAMIC ADDRESS FROM VM
+                                vm.deliveryAddress,
                                 style: const TextStyle(fontSize: 13, color: Colors.black87, height: 1.4),
                               ),
                             ),
@@ -115,7 +116,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 const SizedBox(height: 25),
 
                 // --- Payment Method ---
-                _buildSectionHeader("Payment Method", onChange: () {}),
+                // UPDATED: Added navigation logic to the Change button
+                _buildSectionHeader("Payment Method", onChange: () async {
+                  final selected = await Navigator.pushNamed(
+                    context, 
+                    AppRoutes.paymentMethods, 
+                    arguments: vm.paymentMethod
+                  );
+
+                  if (selected != null && selected is String) {
+                    vm.updatePaymentMethod(selected);
+                  }
+                }),
                 const SizedBox(height: 10),
                 Container(
                   padding: const EdgeInsets.all(15),
@@ -125,7 +137,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.credit_card, color: Colors.blue, size: 30),
+                      // Dynamic Icon based on method (Simplified logic)
+                      Icon(
+                        vm.paymentMethod.contains("Cash") ? Icons.handshake : Icons.credit_card, 
+                        color: vm.paymentMethod.contains("Cash") ? Colors.green : Colors.blue, 
+                        size: 30
+                      ),
                       const SizedBox(width: 15),
                       Text(vm.paymentMethod, style: const TextStyle(fontWeight: FontWeight.w500)),
                       const Spacer(),
@@ -207,7 +224,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                 const SizedBox(height: 30),
 
-                // --- Footer Totals (Calculation Area) ---
+                // --- Footer Totals ---
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -216,10 +233,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   child: Column(
                     children: [
-                      // FIXED: Using vm.subtotal public getter
                       _buildSummaryRow("Cost of total items:", "₦${vm.subtotal.toStringAsFixed(0)}"),
                       const SizedBox(height: 12),
-                      // FIXED: Using vm.deliveryFee public getter
                       _buildSummaryRow("Delivery Fee:", "₦${vm.deliveryFee.toStringAsFixed(0)}"),
                       const SizedBox(height: 12),
                       _buildSummaryRow("Tip:", "₦${vm.tipAmount.toStringAsFixed(0)}"),

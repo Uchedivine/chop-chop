@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Required for ChangeNotifierProvider
+import 'package:provider/provider.dart';
 import '../models/MenuItem.dart';
 import '../viewmodels/CartViewModel.dart';
-import '../viewmodels/CheckoutViewModel.dart'; // Ensure this is imported
+import '../viewmodels/CheckoutViewModel.dart';
 import '../views/SplashScreen.dart';
 import '../views/OnboardingScreens.dart';
 import '../views/LanguageSelectionScreen.dart';
@@ -20,6 +20,7 @@ import '../views/FoodDetailsScreen.dart';
 import '../views/CartScreen.dart';
 import '../views/OrderSummaryScreen.dart';
 import '../views/CheckoutScreen.dart';
+import '../views/PaymentMethodsScreen.dart'; // Fixed missing semicolon
 
 class AppRoutes {
   static const String splash = '/';
@@ -40,6 +41,7 @@ class AppRoutes {
   static const String cart = '/cart';
   static const String orderSummary = '/order-summary';
   static const String checkout = '/checkout';
+  static const String paymentMethods = '/payment-methods';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -78,9 +80,15 @@ class AppRoutes {
           child: CheckoutScreen(
             restaurantName: args?['restaurantName'] ?? "Unknown",
             subtotal: args?['subtotal'] ?? 0.0,
-            deliveryAddress: args?['deliveryAddress'], // Pass dynamic address to the View
+            deliveryAddress: args?['deliveryAddress'],
           ),
         );
+      },
+
+      // ADDED: Payment Methods Route
+      paymentMethods: (context) {
+        final currentMethod = ModalRoute.of(context)?.settings.arguments as String? ?? "Credit/Debit Card";
+        return PaymentMethodsScreen(currentMethod: currentMethod);
       },
     };
   }
@@ -89,6 +97,11 @@ class AppRoutes {
 
   static void navigateTo(BuildContext context, String routeName, {Object? arguments}) {
     Navigator.pushNamed(context, routeName, arguments: arguments);
+  }
+
+  // UPDATED: Helper to return selected payment method
+  static Future<dynamic> navigateToPaymentMethods(BuildContext context, String currentMethod) {
+    return Navigator.pushNamed(context, paymentMethods, arguments: currentMethod);
   }
 
   static void navigateToReplacement(BuildContext context, String routeName) {
@@ -118,7 +131,6 @@ class AppRoutes {
     );
   }
 
-  // UPDATED: Added address parameter to ensure Checkout reflects the current user location
   static void navigateToCheckout(BuildContext context, String name, double total, String address) {
     navigateTo(
       context,
