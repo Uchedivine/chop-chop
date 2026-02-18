@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../routes/AppRoutes.dart';
 
 enum LoginMethod { phone, email }
 
@@ -64,7 +63,7 @@ class LoginViewModel extends ChangeNotifier {
     return _errorMessage == null;
   }
 
-  Future<void> handleContinue(String input, BuildContext context) async {
+  Future<void> handleContinue(String input, VoidCallback onNext) async {
     if (validateInput(input)) {
       _isLoading = true;
       notifyListeners();
@@ -77,10 +76,7 @@ class LoginViewModel extends ChangeNotifier {
 
       debugPrint("Proceeding with: $input");
 
-      // Fix: Check if context is still mounted after async gap
-      if (!context.mounted) return;
-
-      AppRoutes.navigateToOtp(context, input);
+      onNext();
     }
   }
 }

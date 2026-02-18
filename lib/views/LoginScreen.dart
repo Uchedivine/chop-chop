@@ -4,6 +4,7 @@ import '../viewmodels/LoginViewModel.dart';
 import '../viewmodels/ThemeViewModel.dart';
 import '../widgets/PrimaryButton.dart';
 import 'package:flutter/services.dart';
+import '../routes/AppRoutes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -100,8 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: "Continue",
                 isLoading: loginVM.isLoading,
                 // Passing logic to ViewModel
-                onPressed: () =>
-                    loginVM.handleContinue(_inputController.text, context),
+                onPressed: () => loginVM.handleContinue(
+                  _inputController.text,
+                  () => AppRoutes.navigateToOtp(context, _inputController.text),
+                ),
               ),
 
               const SizedBox(height: 32),

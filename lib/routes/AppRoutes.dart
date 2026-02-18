@@ -12,6 +12,7 @@ import '../views/LoginScreen.dart';
 import '../views/OTPScreen.dart';
 import '../views/LocationMapScreen.dart';
 import '../views/AddressDetailsScreen.dart';
+import '../views/SupportScreen.dart';
 import '../views/FoodPreferenceScreen.dart';
 import '../views/RestaurantPreferenceScreen.dart';
 import '../views/HomeScreen.dart';
@@ -48,6 +49,7 @@ class AppRoutes {
   static const String paymentMethods = '/payment-methods';
   static const String orderSuccess = '/order-success';
   static const String trackOrder = '/track-order'; // Added
+  static const String support = '/support';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -72,7 +74,8 @@ class AppRoutes {
       cart: (context) => const CartScreen(),
 
       orderSummary: (context) {
-        final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+        final args =
+            ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
         return OrderSummaryScreen(
           restaurantName: args?['restaurantName'] ?? "Unknown Restaurant",
           restaurantItems: args?['restaurantItems'] ?? <CartItem>[],
@@ -80,7 +83,8 @@ class AppRoutes {
       },
 
       checkout: (context) {
-        final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+        final args =
+            ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
         return ChangeNotifierProvider(
           create: (_) => CheckoutViewModel(),
           child: CheckoutScreen(
@@ -92,12 +96,15 @@ class AppRoutes {
       },
 
       paymentMethods: (context) {
-        final currentMethod = ModalRoute.of(context)?.settings.arguments as String? ?? "Credit/Debit Card";
+        final currentMethod =
+            ModalRoute.of(context)?.settings.arguments as String? ??
+                "Credit/Debit Card";
         return PaymentMethodsScreen(currentMethod: currentMethod);
       },
 
       orderSuccess: (context) {
-        final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+        final args =
+            ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
         return ChangeNotifierProvider(
           create: (_) => OrderSuccessViewModel(),
           child: OrderSuccessScreen(
@@ -110,7 +117,8 @@ class AppRoutes {
 
       // Added Track Order Route
       trackOrder: (context) {
-        final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+        final args =
+            ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
         return ChangeNotifierProvider(
           create: (_) => TrackOrderViewModel(),
           child: TrackOrderScreen(
@@ -119,20 +127,26 @@ class AppRoutes {
           ),
         );
       },
+      register: (context) => const SearchScreen(),
+      support: (context) => const SupportScreen(),
     };
   }
 
   // --- Navigation Helpers ---
 
-  static void navigateTo(BuildContext context, String routeName, {Object? arguments}) {
+  static void navigateTo(BuildContext context, String routeName,
+      {Object? arguments}) {
     Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 
-  static Future<dynamic> navigateToPaymentMethods(BuildContext context, String currentMethod) {
-    return Navigator.pushNamed(context, paymentMethods, arguments: currentMethod);
+  static Future<dynamic> navigateToPaymentMethods(
+      BuildContext context, String currentMethod) {
+    return Navigator.pushNamed(context, paymentMethods,
+        arguments: currentMethod);
   }
 
-  static void navigateToOrderSuccess(BuildContext context, String name, String total, String address) {
+  static void navigateToOrderSuccess(
+      BuildContext context, String name, String total, String address) {
     navigateTo(context, orderSuccess, arguments: {
       'restaurantName': name,
       'totalExpense': total,
@@ -141,7 +155,8 @@ class AppRoutes {
   }
 
   // Added Track Order Helper
-  static void navigateToTrackOrder(BuildContext context, String address, String time) {
+  static void navigateToTrackOrder(
+      BuildContext context, String address, String time) {
     navigateTo(context, trackOrder, arguments: {
       'deliveryAddress': address,
       'estimatedTime': time,
@@ -164,14 +179,16 @@ class AppRoutes {
     navigateTo(context, foodDetailsRoute, arguments: item);
   }
 
-  static void navigateToOrderSummary(BuildContext context, String name, List<CartItem> items) {
+  static void navigateToOrderSummary(
+      BuildContext context, String name, List<CartItem> items) {
     navigateTo(context, orderSummary, arguments: {
       'restaurantName': name,
       'restaurantItems': items,
     });
   }
 
-  static void navigateToCheckout(BuildContext context, String name, double total, String address) {
+  static void navigateToCheckout(
+      BuildContext context, String name, double total, String address) {
     navigateTo(context, checkout, arguments: {
       'restaurantName': name,
       'subtotal': total,

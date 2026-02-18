@@ -67,14 +67,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // --- 1:1 UI Helper Widgets ---
 
-  Widget _buildHeader(BuildContext context, String address, CartViewModel cartVM) {
+  Widget _buildHeader(
+      BuildContext context, String address, CartViewModel cartVM) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: Colors.orange.withOpacity(0.1),
-            child: const Icon(Icons.location_on, color: Colors.orange, size: 20),
+            child:
+                const Icon(Icons.location_on, color: Colors.orange, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -107,10 +109,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.pushNamed(context, AppRoutes.cart);
             },
             child: _buildHeaderIcon(
-              Icons.shopping_cart_outlined, 
+              Icons.shopping_cart_outlined,
               // Passing the actual count from the ViewModel
               // If cart is empty, we pass null so the badge is hidden
-              count: cartVM.items.isEmpty ? null : cartVM.items.length.toString(),
+              count:
+                  cartVM.items.isEmpty ? null : cartVM.items.length.toString(),
             ),
           ),
           const SizedBox(width: 15),
@@ -127,7 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildHeaderIcon(IconData icon, {String? count}) {
     return Stack(
-      clipBehavior: Clip.none, // Allows the badge to sit slightly outside the icon frame
+      clipBehavior:
+          Clip.none, // Allows the badge to sit slightly outside the icon frame
       children: [
         Icon(icon, color: Colors.black87),
         if (count != null)
@@ -282,7 +286,8 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              style:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           if (showSeeAll)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -303,19 +308,30 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBottomNavBar() {
     return BottomNavigationBar(
       currentIndex: _selectedNavIndex,
-      onTap: (index) => setState(() => _selectedNavIndex = index),
+      onTap: (index) {
+        if (index == 2) {
+          Navigator.pushNamed(context, AppRoutes.support);
+        } else {
+          setState(() => _selectedNavIndex = index);
+        }
+      },
       type: BottomNavigationBarType.fixed,
       selectedItemColor: Colors.orange,
       unselectedItemColor: Colors.grey,
       showUnselectedLabels: true,
-      selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+      selectedLabelStyle:
+          const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
       unselectedLabelStyle: const TextStyle(fontSize: 10),
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.assignment_outlined), label: "Orders"),
-        BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: "Support"),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: "Favorites"),
-        BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: "Profile"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.assignment_outlined), label: "Orders"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_outline), label: "Support"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border), label: "Favorites"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline), label: "Profile"),
       ],
     );
   }
