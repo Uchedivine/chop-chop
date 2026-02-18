@@ -13,6 +13,7 @@ import '../views/OTPScreen.dart';
 import '../views/LocationMapScreen.dart';
 import '../views/AddressDetailsScreen.dart';
 import '../views/SupportScreen.dart';
+import '../views/FavoritesScreen.dart';
 import '../views/FoodPreferenceScreen.dart';
 import '../views/RestaurantPreferenceScreen.dart';
 import '../views/HomeScreen.dart';
@@ -50,6 +51,7 @@ class AppRoutes {
   static const String orderSuccess = '/order-success';
   static const String trackOrder = '/track-order'; // Added
   static const String support = '/support';
+  static const String favorites = '/favorites';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -129,6 +131,7 @@ class AppRoutes {
       },
       register: (context) => const SearchScreen(),
       support: (context) => const SupportScreen(),
+      favorites: (context) => const FavoritesScreen(),
     };
   }
 
