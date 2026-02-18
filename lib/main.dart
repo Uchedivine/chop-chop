@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'utils/AppTheme.dart';
 import 'routes/AppRoutes.dart';
+import 'utils/AppTheme.dart';
 import 'viewmodels/OnboardingViewModel.dart';
 import 'viewmodels/LanguageViewModel.dart';
 import 'viewmodels/ThemeViewModel.dart';
@@ -12,7 +12,7 @@ import 'viewmodels/home_view_model.dart';
 import 'viewmodels/SearchViewModel.dart';
 import 'viewmodels/NotificationsViewModel.dart';
 import 'viewmodels/CartViewModel.dart';
-import 'viewmodels/CheckoutViewModel.dart';
+import 'viewmodels/SupportViewModel.dart';
 
 void main() {
   runApp(const ChopChopApp());
@@ -35,7 +35,7 @@ class ChopChopApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SearchViewModel()),
         ChangeNotifierProvider(create: (_) => NotificationsViewModel()),
         ChangeNotifierProvider(create: (_) => CartViewModel()),
-         ChangeNotifierProvider(create: (_) => CheckoutViewModel()),
+        ChangeNotifierProvider(create: (_) => SupportViewModel()),
       ],
       // Listens for theme changes to rebuild the app
       child: Consumer<ThemeViewModel>(
@@ -43,12 +43,12 @@ class ChopChopApp extends StatelessWidget {
           return MaterialApp(
             title: 'Chop Chop',
             debugShowCheckedModeBanner: false,
-            
+
             // Theme configuration
-            themeMode: themeViewModel.themeMode, 
+            themeMode: themeViewModel.themeMode,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            
+
             // Navigation configuration
             initialRoute: AppRoutes.splash,
             // Reverted to use the routes map for named route support
