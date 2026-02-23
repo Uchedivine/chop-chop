@@ -15,7 +15,6 @@ class FoodDetailsScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => FoodDetailsViewModel(),
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: Consumer<FoodDetailsViewModel>(
           builder: (context, vm, child) {
             return Column(
@@ -26,8 +25,8 @@ class FoodDetailsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildHeader(context, item),
-                        _buildFoodInfo(item),
-                        _buildAdditionalOptions(vm),
+                        _buildFoodInfo(context, item),
+                        _buildAdditionalOptions(context, vm),
                       ],
                     ),
                   ),
@@ -51,10 +50,10 @@ class FoodDetailsScreen extends StatelessWidget {
           left: 20,
           child: GestureDetector(
             onTap: () => Navigator.pop(context),
-            child: const CircleAvatar(
-              backgroundColor: Colors.white,
-              child:
-                  Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black),
+            child: CircleAvatar(
+              backgroundColor: Theme.of(context).cardColor,
+              child: Icon(Icons.arrow_back_ios_new,
+                  size: 18, color: Theme.of(context).iconTheme.color),
             ),
           ),
         ),
@@ -62,7 +61,7 @@ class FoodDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFoodInfo(MenuItem item) {
+  Widget _buildFoodInfo(BuildContext context, MenuItem item) {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -77,14 +76,17 @@ class FoodDetailsScreen extends StatelessWidget {
                   const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
           const SizedBox(height: 15),
           Text(item.description,
-              style: const TextStyle(
-                  color: Colors.grey, fontSize: 14, height: 1.5)),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(height: 1.5)),
         ],
       ),
     );
   }
 
-  Widget _buildAdditionalOptions(FoodDetailsViewModel vm) {
+  Widget _buildAdditionalOptions(
+      BuildContext context, FoodDetailsViewModel vm) {
     final List<Map<String, String>> options = [
       {'name': 'Moi - Moi', 'price': '+₦800'},
       {'name': 'Plantain', 'price': '+₦1,200'},
@@ -99,13 +101,14 @@ class FoodDetailsScreen extends StatelessWidget {
           const Text("Additional Options",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 15),
-          ...options.map((opt) => _optionTile(opt, vm)).toList(),
+          ...options.map((opt) => _optionTile(context, opt, vm)).toList(),
         ],
       ),
     );
   }
 
-  Widget _optionTile(Map<String, String> opt, FoodDetailsViewModel vm) {
+  Widget _optionTile(
+      BuildContext context, Map<String, String> opt, FoodDetailsViewModel vm) {
     bool isSelected = vm.selectedOptions.contains(opt['name']);
     return GestureDetector(
       onTap: () => vm.toggleOption(opt['name']!),
@@ -113,7 +116,7 @@ class FoodDetailsScreen extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
@@ -140,60 +143,72 @@ class FoodDetailsScreen extends StatelessWidget {
   }
 
   // Add BuildContext context here 👇
-Widget _buildBottomAction(BuildContext context, MenuItem item, FoodDetailsViewModel vm) {
-  return Container(
-    padding: const EdgeInsets.all(25),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5))],
-    ),
-    child: Column(
-      children: [
-        _quantitySelector(vm),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Total", style: TextStyle(color: Colors.grey, fontSize: 12)),
-                Text(vm.calculateTotal(item.price), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              ],
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Now 'context' is available for Provider and Navigator!
-                Provider.of<CartViewModel>(context, listen: false).addToCart(
-                  item, 
-                  vm.quantity, 
-                  vm.selectedOptions.toList()
-                );
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Added to cart!"), duration: Duration(seconds: 1))
-                );
-                
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF9431),
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  Widget _buildBottomAction(
+      BuildContext context, MenuItem item, FoodDetailsViewModel vm) {
+    return Container(
+      padding: const EdgeInsets.all(25),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -5))
+        ],
+      ),
+      child: Column(
+        children: [
+          _quantitySelector(context, vm),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Total",
+                      style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  Text(vm.calculateTotal(item.price),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold)),
+                ],
               ),
-              child: const Text("Add to Cart", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
+              ElevatedButton(
+                onPressed: () {
+                  // Now 'context' is available for Provider and Navigator!
+                  Provider.of<CartViewModel>(context, listen: false).addToCart(
+                      item, vm.quantity, vm.selectedOptions.toList());
 
-  Widget _quantitySelector(FoodDetailsViewModel vm) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Added to cart!"),
+                      duration: Duration(seconds: 1)));
+
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF9431),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text("Add to Cart",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _quantitySelector(BuildContext context, FoodDetailsViewModel vm) {
     return Container(
       decoration: BoxDecoration(
-          color: const Color(0xFFF3F4F6),
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         mainAxisSize: MainAxisSize.min,

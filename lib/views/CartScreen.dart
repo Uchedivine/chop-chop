@@ -9,25 +9,26 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leadingWidth: 70,
         leading: _buildBackButton(context),
-        title: const Text("Cart", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
+        title:
+            Text("Cart", style: Theme.of(context).appBarTheme.titleTextStyle),
         centerTitle: true,
       ),
       body: Consumer<CartViewModel>(
         builder: (context, cart, child) {
           if (cart.items.isEmpty) {
-            return const Center(child: Text("Your cart is empty", style: TextStyle(color: Colors.grey)));
+            return const Center(
+                child: Text("Your cart is empty",
+                    style: TextStyle(color: Colors.grey)));
           }
-          
+
           final groupedItems = <String, List<CartItem>>{};
           for (var item in cart.items) {
             // No more hardcoding!
-            final name = item.food.restaurantName ?? "Unknown Restaurant"; 
+            final name = item.food.restaurantName ?? "Unknown Restaurant";
             groupedItems.putIfAbsent(name, () => []).add(item);
           }
 
@@ -45,10 +46,13 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRestaurantCard(BuildContext context, String name, List<CartItem> items) {
+  Widget _buildRestaurantCard(
+      BuildContext context, String name, List<CartItem> items) {
     final firstItem = items.first.food;
     double restaurantTotal = items.fold(0, (sum, item) {
-      final price = double.tryParse(item.food.price.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+      final price =
+          double.tryParse(item.food.price.replaceAll(RegExp(r'[^0-9]'), '')) ??
+              0;
       return sum + (price * item.quantity);
     });
 
@@ -56,9 +60,14 @@ class CartScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4))
+        ],
       ),
       child: Column(
         children: [
@@ -66,19 +75,22 @@ class CartScreen extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  firstItem.restaurantIcon ?? firstItem.image, 
-                  width: 70, height: 70, fit: BoxFit.cover
-                ),
+                child: Image.asset(firstItem.restaurantIcon ?? firstItem.image,
+                    width: 70, height: 70, fit: BoxFit.cover),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text(name,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16)),
                     const SizedBox(height: 4),
-                    Text("₦${restaurantTotal.toStringAsFixed(0)} | ${items.length} Items", style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                    Text(
+                        "₦${restaurantTotal.toStringAsFixed(0)} | ${items.length} Items",
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 12)),
                   ],
                 ),
               ),
@@ -89,12 +101,16 @@ class CartScreen extends StatelessWidget {
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: () => AppRoutes.navigateToOrderSummary(context, name, items),
+              onPressed: () =>
+                  AppRoutes.navigateToOrderSummary(context, name, items),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFF9431),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text("Order Summary", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              child: const Text("Order Summary",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
             ),
           ),
         ],
@@ -108,8 +124,11 @@ class CartScreen extends StatelessWidget {
       child: InkWell(
         onTap: () => Navigator.pop(context),
         child: Container(
-          decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(12)),
-          child: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 18),
+          decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(12)),
+          child: Icon(Icons.arrow_back_ios_new,
+              color: Theme.of(context).iconTheme.color, size: 18),
         ),
       ),
     );

@@ -36,16 +36,15 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 18),
+          icon: Icon(Icons.arrow_back_ios_new,
+              color: Theme.of(context).iconTheme.color, size: 18),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Payment Methods", 
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: Text("Payment Methods",
+            style: Theme.of(context).appBarTheme.titleTextStyle),
         centerTitle: true,
       ),
       body: Padding(
@@ -56,13 +55,15 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Add a new Debit/Credit Card", 
-                  style: TextStyle(fontSize: 14, color: Colors.black87)),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.add, color: Colors.grey)),
+                Text("Add a new Debit/Credit Card",
+                    style: Theme.of(context).textTheme.bodyMedium),
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.add, color: Colors.grey)),
               ],
             ),
             const SizedBox(height: 10),
-            
+
             // List of Methods
             Expanded(
               child: ListView.separated(
@@ -79,7 +80,9 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: isSelected ? const Color(0xFFFF9431) : Colors.grey.shade200,
+                          color: isSelected
+                              ? const Color(0xFFFF9431)
+                              : Theme.of(context).dividerColor,
                           width: 1.5,
                         ),
                       ),
@@ -87,11 +90,19 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                         children: [
                           Icon(method.icon, color: method.iconColor, size: 28),
                           const SizedBox(width: 15),
-                          Text(method.name, style: const TextStyle(fontWeight: FontWeight.w500)),
+                          Text(method.name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(fontWeight: FontWeight.w500)),
                           const Spacer(),
                           Icon(
-                            isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
-                            color: isSelected ? const Color(0xFFFF9431) : Colors.grey,
+                            isSelected
+                                ? Icons.radio_button_checked
+                                : Icons.radio_button_off,
+                            color: isSelected
+                                ? const Color(0xFFFF9431)
+                                : Colors.grey,
                           ),
                         ],
                       ),
@@ -109,10 +120,14 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                 onPressed: () => Navigator.pop(context, _selectedMethod),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF9431),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
                 ),
-                child: const Text("Select", 
-                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                child: const Text("Select",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold)),
               ),
             ),
           ],

@@ -6,7 +6,7 @@ class AppTheme {
   static const Color secondaryColor = Color(0xFFF0B810); // Yellow
   static const Color lightColor = Color(0xFFF4F4F4); // Light gray/white
   static const Color darkColor = Color(0xFF212121); // Dark gray/black
-  
+
   // Additional colors for UI elements
   static const Color backgroundColor = Color(0xFFF4F4F4);
   static const Color cardColor = Color(0xFFFFFFFF);
@@ -27,7 +27,7 @@ class AppTheme {
     primaryColor: primaryColor,
     scaffoldBackgroundColor: backgroundColor,
     fontFamily: secondaryFontFamily, // Inter as default
-    
+
     colorScheme: const ColorScheme.light(
       primary: primaryColor,
       secondary: secondaryColor,
@@ -41,7 +41,7 @@ class AppTheme {
 
     // AppBar Theme
     appBarTheme: const AppBarTheme(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.transparent,
       elevation: 0,
       centerTitle: true,
       iconTheme: IconThemeData(color: textPrimaryColor),
@@ -74,7 +74,7 @@ class AppTheme {
         color: textPrimaryColor,
         fontFamily: primaryFontFamily,
       ),
-      
+
       // Headline styles - DM Sans Semi-bold
       headlineLarge: TextStyle(
         fontSize: 24,
@@ -94,7 +94,7 @@ class AppTheme {
         color: textPrimaryColor,
         fontFamily: primaryFontFamily,
       ),
-      
+
       // Title styles - DM Sans Medium
       titleLarge: TextStyle(
         fontSize: 18,
@@ -114,7 +114,7 @@ class AppTheme {
         color: textPrimaryColor,
         fontFamily: primaryFontFamily,
       ),
-      
+
       // Body styles - Inter
       bodyLarge: TextStyle(
         fontSize: 16,
@@ -134,7 +134,7 @@ class AppTheme {
         color: textSecondaryColor,
         fontFamily: secondaryFontFamily,
       ),
-      
+
       // Label styles - Inter
       labelLarge: TextStyle(
         fontSize: 14,
@@ -258,7 +258,7 @@ class AppTheme {
     primaryColor: primaryColor,
     scaffoldBackgroundColor: darkColor,
     fontFamily: secondaryFontFamily,
-    
+
     colorScheme: const ColorScheme.dark(
       primary: primaryColor,
       secondary: secondaryColor,
@@ -305,7 +305,7 @@ class AppTheme {
         color: lightColor,
         fontFamily: primaryFontFamily,
       ),
-      
+
       // Headline styles - DM Sans Semi-bold
       headlineLarge: TextStyle(
         fontSize: 24,
@@ -325,7 +325,7 @@ class AppTheme {
         color: lightColor,
         fontFamily: primaryFontFamily,
       ),
-      
+
       // Title styles - DM Sans Medium
       titleLarge: TextStyle(
         fontSize: 18,
@@ -345,7 +345,7 @@ class AppTheme {
         color: lightColor,
         fontFamily: primaryFontFamily,
       ),
-      
+
       // Body styles - Inter
       bodyLarge: TextStyle(
         fontSize: 16,
@@ -365,7 +365,7 @@ class AppTheme {
         color: Color(0xFFB0B0B0),
         fontFamily: secondaryFontFamily,
       ),
-      
+
       // Label styles - Inter
       labelLarge: TextStyle(
         fontSize: 14,

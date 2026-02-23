@@ -42,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final favoritesVM = Provider.of<FavoritesViewModel>(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       bottomNavigationBar: _buildBottomNavBar(),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -85,8 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Delivery Address:",
-                    style: TextStyle(color: Colors.grey, fontSize: 11)),
+                Text("Delivery Address:",
+                    style: Theme.of(context).textTheme.bodySmall),
                 Row(
                   children: [
                     Flexible(
@@ -125,6 +124,18 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: _buildHeaderIcon(Icons.notifications_none, count: "5"),
           ),
+          const SizedBox(width: 15),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.profile);
+            },
+            child: CircleAvatar(
+              radius: 18,
+              backgroundColor: Theme.of(context).cardColor,
+              child: Icon(Icons.person_outline,
+                  color: Theme.of(context).iconTheme.color, size: 20),
+            ),
+          ),
         ],
       ),
     );
@@ -135,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
       clipBehavior:
           Clip.none, // Allows the badge to sit slightly outside the icon frame
       children: [
-        Icon(icon, color: Colors.black87),
+        Icon(icon, color: Theme.of(context).iconTheme.color),
         if (count != null)
           Positioned(
             right: -4,
@@ -172,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
               hintText: "Wetin you want chop today?",
               prefixIcon: const Icon(Icons.search, color: Colors.grey),
               filled: true,
-              fillColor: const Color(0xFFF3F4F6),
+              fillColor: Theme.of(context).cardColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide.none,
@@ -314,6 +325,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.pushNamed(context, AppRoutes.support);
         } else if (index == 3) {
           Navigator.pushNamed(context, AppRoutes.favorites);
+        } else if (index == 4) {
+          Navigator.pushNamed(context, AppRoutes.profile);
         } else {
           setState(() => _selectedNavIndex = index);
         }

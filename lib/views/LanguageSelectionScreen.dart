@@ -16,7 +16,7 @@ class LanguageSelectionScreen extends StatelessWidget {
     return Scaffold(
       // 2. Use theme background so it switches automatically
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      
+
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
@@ -24,8 +24,12 @@ class LanguageSelectionScreen extends StatelessWidget {
           IconButton(
             icon: Icon(
               // 3. FIX: Use 'themeVM' here, not 'themeViewModel'
-              themeVM.isDarkMode ? Icons.nightlight_round : Icons.wb_sunny_outlined,
-              color: themeVM.isDarkMode ? Colors.white : Colors.orange,
+              themeVM.isDarkMode
+                  ? Icons.nightlight_round
+                  : Icons.wb_sunny_outlined,
+              color: themeVM.isDarkMode
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.orange,
             ),
             onPressed: () {
               // 4. FIX: Use 'themeVM' here as well
@@ -46,7 +50,7 @@ class LanguageSelectionScreen extends StatelessWidget {
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   // Use dynamic color for text (White in dark mode, Black in light)
-                  color: themeVM.isDarkMode ? Colors.white : const Color(0xFF1A1A1A),
+                  color: Theme.of(context).textTheme.headlineMedium?.color,
                 ),
               ),
               const SizedBox(height: 32),
@@ -60,18 +64,21 @@ class LanguageSelectionScreen extends StatelessWidget {
                       onTap: () => viewModel.selectLanguage(index),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 20),
                         decoration: BoxDecoration(
                           // Border color logic
                           border: Border.all(
-                            color: isSelected 
-                                ? const Color(0xFFF66C09) 
-                                : (themeVM.isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300),
+                            color: isSelected
+                                ? const Color(0xFFF66C09)
+                                : (themeVM.isDarkMode
+                                    ? Colors.grey.shade800
+                                    : Colors.grey.shade300),
                             width: 1.5,
                           ),
                           borderRadius: BorderRadius.circular(12),
                           // Optional: Add slight background color for dark mode items
-                          color: themeVM.isDarkMode ? Colors.grey.shade900 : Colors.transparent,
+                          color: Theme.of(context).cardColor,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,10 +88,16 @@ class LanguageSelectionScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 16,
                                 // Text color logic
-                                color: isSelected 
-                                    ? (themeVM.isDarkMode ? Colors.white : Colors.black)
-                                    : (themeVM.isDarkMode ? Colors.grey.shade400 : Colors.grey.shade600),
-                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                                color: isSelected
+                                    ? (themeVM.isDarkMode
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Colors.black)
+                                    : (themeVM.isDarkMode
+                                        ? Colors.grey.shade400
+                                        : Colors.grey.shade600),
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
                               ),
                             ),
                             // Radio Indicator
@@ -94,7 +107,9 @@ class LanguageSelectionScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: isSelected ? const Color(0xFFF66C09) : Colors.grey.shade400,
+                                  color: isSelected
+                                      ? const Color(0xFFF66C09)
+                                      : Colors.grey.shade400,
                                   width: 2,
                                 ),
                               ),
@@ -122,8 +137,9 @@ class LanguageSelectionScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: PrimaryButton(
                   text: "Select",
-                  onPressed: () { Navigator.pushNamed(context, '/login'); 
-  },
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
                 ),
               ),
             ],

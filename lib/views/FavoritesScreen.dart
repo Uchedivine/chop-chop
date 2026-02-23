@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/FavoritesViewModel.dart';
-import '../viewmodels/ThemeViewModel.dart';
 import '../widgets/RestaurantCard.dart';
 import '../routes/AppRoutes.dart';
 
@@ -11,25 +10,17 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favoritesVM = Provider.of<FavoritesViewModel>(context);
-    final themeVM = Provider.of<ThemeViewModel>(context);
 
     return Scaffold(
-      backgroundColor:
-          themeVM.isDarkMode ? const Color(0xFF121212) : Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           "Favorites",
-          style: TextStyle(
-            color: themeVM.isDarkMode ? Colors.white : Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search,
-                color: themeVM.isDarkMode ? Colors.white : Colors.black),
+            icon: Icon(Icons.search, color: Theme.of(context).iconTheme.color),
             onPressed: () {
               Navigator.pushNamed(context, AppRoutes.searchRoute);
             },
@@ -38,12 +29,13 @@ class FavoritesScreen extends StatelessWidget {
       ),
       bottomNavigationBar: _buildBottomNavBar(context),
       body: favoritesVM.favoriteRestaurants.isEmpty
-          ? _buildEmptyState(themeVM)
+          ? _buildEmptyState(context) // Pass context to _buildEmptyState
           : _buildFavoritesList(context, favoritesVM),
     );
   }
 
-  Widget _buildEmptyState(ThemeViewModel themeVM) {
+  Widget _buildEmptyState(BuildContext context) {
+    // Added BuildContext context parameter
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -51,14 +43,14 @@ class FavoritesScreen extends StatelessWidget {
           Icon(
             Icons.favorite_border,
             size: 64,
-            color: Colors.grey[400],
+            color: Theme.of(context).disabledColor,
           ),
           const SizedBox(height: 16),
           Text(
             "No favorites yet",
             style: TextStyle(
               fontSize: 18,
-              color: Colors.grey[600],
+              color: Theme.of(context).textTheme.bodyLarge?.color,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -68,7 +60,7 @@ class FavoritesScreen extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey[500],
+              color: Theme.of(context).textTheme.bodySmall?.color,
             ),
           ),
         ],
@@ -117,16 +109,16 @@ class FavoritesScreen extends StatelessWidget {
         if (index == 0) {
           Navigator.pushNamedAndRemoveUntil(
               context, AppRoutes.home, (route) => false);
-        } else if (index == 2) {
-          Navigator.pushNamed(context, AppRoutes.support);
+        } else if (index == 4) {
+          Navigator.pushNamed(context, AppRoutes.profile);
         } else if (index != 3) {
           // Handle other tabs if necessary
           debugPrint("Tap index: $index");
         }
       },
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.orange,
-      unselectedItemColor: Colors.grey,
+      selectedItemColor: Theme.of(context).primaryColor, // Use theme color
+      unselectedItemColor: Theme.of(context).disabledColor, // Use theme color
       showUnselectedLabels: true,
       selectedLabelStyle:
           const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
