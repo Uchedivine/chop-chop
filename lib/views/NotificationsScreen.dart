@@ -11,19 +11,21 @@ class NotificationsScreen extends StatelessWidget {
     final navVM = Provider.of<NotificationsViewModel>(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(10)),
-            child: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.grey),
+            decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(10)),
+            child: const Icon(Icons.arrow_back_ios_new,
+                size: 18, color: Colors.grey),
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Notifications", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: Text("Notifications",
+            style: Theme.of(context).appBarTheme.titleTextStyle),
         centerTitle: true,
       ),
       body: Column(
@@ -42,7 +44,8 @@ class NotificationsScreen extends StatelessWidget {
             child: ListView.builder(
               padding: const EdgeInsets.all(20),
               itemCount: navVM.notifications.length,
-              itemBuilder: (context, index) => _NotificationCard(notification: navVM.notifications[index]),
+              itemBuilder: (context, index) =>
+                  _NotificationCard(notification: navVM.notifications[index]),
             ),
           ),
         ],
@@ -50,16 +53,25 @@ class NotificationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTab(BuildContext context, String label, int index, NotificationsViewModel vm) {
+  Widget _buildTab(BuildContext context, String label, int index,
+      NotificationsViewModel vm) {
     bool isSelected = vm.selectedTabIndex == index;
     return Expanded(
       child: GestureDetector(
         onTap: () => vm.setTabIndex(index),
         child: Column(
           children: [
-            Text(label, style: TextStyle(color: isSelected ? Colors.orange : Colors.grey, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
+            Text(label,
+                style: TextStyle(
+                    color: isSelected ? Colors.orange : Colors.grey,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal)),
             const SizedBox(height: 8),
-            Container(height: 2, color: isSelected ? Colors.orange : Colors.grey[200]),
+            Container(
+                height: 2,
+                color: isSelected
+                    ? Colors.orange
+                    : Theme.of(context).dividerColor),
           ],
         ),
       ),
@@ -76,7 +88,9 @@ class _NotificationCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(15)),
+      decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(15)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -92,23 +106,38 @@ class _NotificationCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(notification.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        Text(notification.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.bold)),
                         if (notification.isNew)
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(color: Colors.orange[50], borderRadius: BorderRadius.circular(10)),
-                            child: const Text("New", style: TextStyle(color: Colors.orange, fontSize: 12, fontWeight: FontWeight.bold)),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                                color: Colors.orange[50],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Text("New",
+                                style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold)),
                           ),
                       ],
                     ),
-                    Text(notification.time, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                    Text(notification.time,
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 12)),
                   ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          Text(notification.message, style: TextStyle(color: Colors.grey[700], fontSize: 13, height: 1.4)),
+          Text(notification.message,
+              style:
+                  Theme.of(context).textTheme.bodySmall?.copyWith(height: 1.4)),
           if (notification.actionLabel != null) ...[
             const SizedBox(height: 15),
             PrimaryButton(text: notification.actionLabel!, onPressed: () {}),
@@ -124,11 +153,30 @@ class _NotificationCard extends StatelessWidget {
     Color iconColor;
 
     switch (notification.status) {
-      case 'canceled': bgColor = Colors.red[50]!; icon = Icons.shopping_bag; iconColor = Colors.red; break;
-      case 'delivered': bgColor = Colors.green[50]!; icon = Icons.shopping_bag; iconColor = Colors.green; break;
-      case 'on-way': bgColor = Colors.orange[50]!; icon = Icons.local_shipping; iconColor = Colors.orange; break;
-      case 'received': bgColor = Colors.blue[50]!; icon = Icons.shopping_bag; iconColor = Colors.blue; break;
-      default: bgColor = Colors.green[50]!; icon = Icons.check_circle; iconColor = Colors.green;
+      case 'canceled':
+        bgColor = Colors.red[50]!;
+        icon = Icons.shopping_bag;
+        iconColor = Colors.red;
+        break;
+      case 'delivered':
+        bgColor = Colors.green[50]!;
+        icon = Icons.shopping_bag;
+        iconColor = Colors.green;
+        break;
+      case 'on-way':
+        bgColor = Colors.orange[50]!;
+        icon = Icons.local_shipping;
+        iconColor = Colors.orange;
+        break;
+      case 'received':
+        bgColor = Colors.blue[50]!;
+        icon = Icons.shopping_bag;
+        iconColor = Colors.blue;
+        break;
+      default:
+        bgColor = Colors.green[50]!;
+        icon = Icons.check_circle;
+        iconColor = Colors.green;
     }
 
     return Container(

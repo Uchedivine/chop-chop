@@ -31,24 +31,34 @@ class RestaurantCard extends StatelessWidget {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(image, height: 160, width: double.infinity, fit: BoxFit.cover),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                child: Image.asset(image,
+                    height: 160, width: double.infinity, fit: BoxFit.cover),
               ),
               // Time Badge Overlay
               Positioned(
                 bottom: 12,
                 right: 12,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.7),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.access_time, color: Colors.orange, size: 14),
+                      const Icon(Icons.access_time,
+                          color: Colors.orange, size: 14),
                       const SizedBox(width: 4),
-                      Text(time, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                      Text(time,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -73,27 +83,38 @@ class RestaurantCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(name,
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
           Row(
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(8)),
                 child: Row(
                   children: [
                     const Icon(Icons.star, color: Colors.white, size: 12),
                     const SizedBox(width: 2),
-                    Text(rating, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                    Text(rating,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
               const SizedBox(width: 6),
-              Text("(500+)", style: TextStyle(color: Colors.grey[600], fontSize: 11)),
+              Text("(500+)", style: Theme.of(context).textTheme.bodySmall),
               const SizedBox(width: 12),
               const Icon(Icons.delivery_dining, color: Colors.orange, size: 16),
               const SizedBox(width: 4),
-              Text("₦$price", style: TextStyle(color: Colors.grey[800], fontSize: 11, fontWeight: FontWeight.bold)),
+              Text("₦$price",
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      )),
             ],
           ),
         ],

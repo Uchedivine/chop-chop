@@ -22,12 +22,11 @@ class AddressDetailsScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: Icon(Icons.arrow_back_ios,
+              color: Theme.of(context).iconTheme.color, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -36,9 +35,12 @@ class AddressDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               "Address Details",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
 
@@ -51,7 +53,7 @@ class AddressDetailsScreen extends StatelessWidget {
                 Expanded(
                   child: Text(
                     locationVM.currentAddress,
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ],
@@ -75,9 +77,12 @@ class AddressDetailsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
 
-            const Text(
+            Text(
               "Choose Building Type",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
 
@@ -97,12 +102,13 @@ class AddressDetailsScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12),
-                        // Orange border if selected, otherwise grey
+                        // Orange border if selected, otherwise separator color
                         border: Border.all(
-                          color:
-                              isSelected ? Colors.orange : Colors.grey.shade200,
+                          color: isSelected
+                              ? Colors.orange
+                              : Theme.of(context).dividerColor,
                           width: isSelected ? 2 : 1,
                         ),
                       ),
@@ -111,11 +117,15 @@ class AddressDetailsScreen extends StatelessWidget {
                         children: [
                           Text(
                             type,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color:
-                                  isSelected ? Colors.black : Colors.grey[600],
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: isSelected
+                                          ? Colors.orange
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.color,
+                                    ),
                           ),
                           // Radio icon state
                           Icon(

@@ -13,32 +13,25 @@ class SupportScreen extends StatelessWidget {
     final supportVM = Provider.of<SupportViewModel>(context);
 
     return Scaffold(
-      backgroundColor:
-          themeVM.isDarkMode ? const Color(0xFF121212) : Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: themeVM.isDarkMode ? Colors.grey[900] : Colors.grey[100],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: IconButton(
-              icon: Icon(Icons.menu,
-                  color: themeVM.isDarkMode ? Colors.white : Colors.black),
-              onPressed: () {},
+          child: InkWell(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(Icons.arrow_back_ios_new,
+                  color: Theme.of(context).iconTheme.color, size: 18),
             ),
           ),
         ),
-        title: Text(
-          "Chop Chop A.I",
-          style: TextStyle(
-            color: themeVM.isDarkMode ? Colors.white : Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: Text("Support",
+            style: Theme.of(context).appBarTheme.titleTextStyle),
+        centerTitle: true,
       ),
       bottomNavigationBar: _buildBottomNavBar(context),
       body: Column(
@@ -60,10 +53,10 @@ class SupportScreen extends StatelessWidget {
       onTap: (index) {
         if (index == 0) {
           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-        } else if (index == 3) {
-          Navigator.pushNamed(context, AppRoutes.favorites);
+        } else if (index == 4) {
+          Navigator.pushNamed(context, AppRoutes.profile);
         } else if (index != 2) {
-          // Add navigation for other tabs if needed, for now just Home and Support are linked
+          // Add navigation for other tabs if needed
           debugPrint("Tap index: $index");
         }
       },
@@ -107,18 +100,17 @@ class SupportScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFEAD1), // Peach color from image
+                color: Theme.of(context)
+                    .colorScheme
+                    .secondaryContainer, // Replaced hardcoded color
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Center(
                 child: Text(
                   viewModel.suggestions[index],
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w500), // Replaced hardcoded color
                 ),
               ),
             ),

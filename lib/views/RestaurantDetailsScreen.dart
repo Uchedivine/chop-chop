@@ -10,7 +10,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Extracting dynamic data passed from the Home Screen
-    final Map<String, dynamic> restaurantData = 
+    final Map<String, dynamic> restaurantData =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     return ChangeNotifierProvider(
@@ -20,7 +20,6 @@ class RestaurantDetailsScreen extends StatelessWidget {
         return vm;
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: Consumer<RestaurantDetailsViewModel>(
           builder: (context, vm, child) {
             return Stack(
@@ -36,7 +35,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                
+
                 // Scrollable content
                 CustomScrollView(
                   slivers: [
@@ -49,15 +48,16 @@ class RestaurantDetailsScreen extends StatelessWidget {
                       leading: Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: _buildCircularAction(
+                          context,
                           Icons.arrow_back_ios_new,
                           onPressed: () => Navigator.pop(context),
                           iconSize: 16,
                         ),
                       ),
                       actions: [
-                        _buildCircularAction(Icons.search),
-                        _buildCircularAction(Icons.favorite_border),
-                        _buildCircularAction(Icons.more_horiz),
+                        _buildCircularAction(context, Icons.search),
+                        _buildCircularAction(context, Icons.favorite_border),
+                        _buildCircularAction(context, Icons.more_horiz),
                         const SizedBox(width: 10),
                       ],
                     ),
@@ -66,7 +66,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
-                          _buildOverlayInfoCard(vm),
+                          _buildOverlayInfoCard(context, vm),
                           const SizedBox(height: 20),
                           _buildCategoryTabs(vm),
                         ],
@@ -76,10 +76,12 @@ class RestaurantDetailsScreen extends StatelessWidget {
                     // 3. Current Category Title
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 25, bottom: 10),
+                        padding: const EdgeInsets.only(
+                            left: 20, top: 25, bottom: 10),
                         child: Text(
                           vm.categories[vm.selectedCategoryIndex],
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -90,10 +92,12 @@ class RestaurantDetailsScreen extends StatelessWidget {
                         (context, index) {
                           return Column(
                             children: [
-                              _buildMenuItemTile(context, vm.filteredItems[index]),
+                              _buildMenuItemTile(
+                                  context, vm.filteredItems[index]),
                               const Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 20),
-                                child: Divider(height: 1, color: Color(0xFFEEEEEE)),
+                                child: Divider(
+                                    height: 1, color: Color(0xFFEEEEEE)),
                               ),
                             ],
                           );
@@ -111,18 +115,22 @@ class RestaurantDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCircularAction(IconData icon, {VoidCallback? onPressed, double iconSize = 20}) {
+  Widget _buildCircularAction(BuildContext context, IconData icon,
+      {VoidCallback? onPressed, double iconSize = 20}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-      decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+      decoration: BoxDecoration(
+          color: Theme.of(context).cardColor, shape: BoxShape.circle),
       child: IconButton(
-        icon: Icon(icon, color: Colors.black, size: iconSize),
+        icon: Icon(icon,
+            color: Theme.of(context).iconTheme.color, size: iconSize),
         onPressed: onPressed ?? () {},
       ),
     );
   }
 
-  Widget _buildOverlayInfoCard(RestaurantDetailsViewModel vm) {
+  Widget _buildOverlayInfoCard(
+      BuildContext context, RestaurantDetailsViewModel vm) {
     final data = vm.restaurantData;
     if (data == null) return const SizedBox.shrink();
 
@@ -130,7 +138,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -157,23 +165,22 @@ class RestaurantDetailsScreen extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 data['name'] ?? "Restaurant",
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.3,
-                  color: Color(0xFF1A1A1A),
-                ),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.3,
+                    ),
               ),
             ],
           ),
           const SizedBox(height: 20),
-          
+
           // Badges row
           Row(
             children: [
               _buildFigmaBadge(Icons.star, data['rating'] ?? "5.0"),
               const SizedBox(width: 8),
-              _buildFigmaBadge(Icons.local_shipping, "₦${data['price'] ?? '800'}"),
+              _buildFigmaBadge(
+                  Icons.local_shipping, "₦${data['price'] ?? '800'}"),
               const SizedBox(width: 8),
               _buildFigmaBadge(Icons.access_time, data['time'] ?? "15 - 20"),
             ],
@@ -199,10 +206,10 @@ class RestaurantDetailsScreen extends StatelessWidget {
             const SizedBox(width: 6),
             Flexible(
               child: Text(
-                text, 
+                text,
                 style: const TextStyle(
-                  color: Colors.white, 
-                  fontWeight: FontWeight.w600, 
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
                   fontSize: 13,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -228,15 +235,17 @@ class RestaurantDetailsScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: isSelected ? const Color(0xFFFF9431) : Colors.transparent, 
+                    color: isSelected
+                        ? const Color(0xFFFF9431)
+                        : Colors.transparent,
                     width: 2,
                   ),
                 ),
               ),
               child: Text(
-                vm.categories[index], 
+                vm.categories[index],
                 style: TextStyle(
-                  color: isSelected ? Colors.black : Colors.grey, 
+                  color: isSelected ? Colors.orange : Colors.grey,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   fontSize: 15,
                 ),
@@ -248,95 +257,109 @@ class RestaurantDetailsScreen extends StatelessWidget {
     );
   }
 
-Widget _buildMenuItemTile(BuildContext context, MenuItem item) {
-  // Access the ViewModel to get the restaurant-specific info
-  final vm = Provider.of<RestaurantDetailsViewModel>(context, listen: false);
+  Widget _buildMenuItemTile(BuildContext context, MenuItem item) {
+    // Access the ViewModel to get the restaurant-specific info
+    final vm = Provider.of<RestaurantDetailsViewModel>(context, listen: false);
 
-  return GestureDetector(
-    onTap: () {
-      // 1. Create a "complete" version of the item that knows which restaurant it belongs to
-      final itemWithRestaurant = MenuItem(
-        name: item.name,
-        description: item.description,
-        price: item.price,
-        image: item.image,
-        category: item.category,
-        discount: item.discount,
-        // Pulling these from the VM's restaurantData
-        restaurantName: vm.restaurantData?['name'] ?? "3:30 Eatries",
-        restaurantIcon: vm.getRestaurantLogo(),
-        deliveryTime: vm.restaurantData?['time'] ?? "20 min",
-      );
+    return GestureDetector(
+      onTap: () {
+        // 1. Create a "complete" version of the item that knows which restaurant it belongs to
+        final itemWithRestaurant = MenuItem(
+          name: item.name,
+          description: item.description,
+          price: item.price,
+          image: item.image,
+          category: item.category,
+          discount: item.discount,
+          // Pulling these from the VM's restaurantData
+          restaurantName: vm.restaurantData?['name'] ?? "3:30 Eatries",
+          restaurantIcon: vm.getRestaurantLogo(),
+          deliveryTime: vm.restaurantData?['time'] ?? "20 min",
+        );
 
-      // 2. Pass this complete item to the Food Details page
-      Navigator.pushNamed(
-        context, 
-        AppRoutes.foodDetailsRoute, 
-        arguments: itemWithRestaurant,
-      );
-    },
-    child: Container(
-      padding: const EdgeInsets.all(20),
-      color: Colors.transparent, 
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.asset(item.image, width: 110, height: 110, fit: BoxFit.cover),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(item.price, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                    if (item.discount != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(6)),
-                        child: Text(
-                          item.discount!, 
-                          style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+        // 2. Pass this complete item to the Food Details page
+        Navigator.pushNamed(
+          context,
+          AppRoutes.foodDetailsRoute,
+          arguments: itemWithRestaurant,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        color: Colors.transparent,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.asset(item.image,
+                  width: 110, height: 110, fit: BoxFit.cover),
+            ),
+            const SizedBox(width: 15),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(item.price,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18)),
+                      if (item.discount != null)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(6)),
+                          child: Text(
+                            item.discount!,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  item.name, 
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF4A4A4A)),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  item.description, 
-                  maxLines: 3, 
-                  overflow: TextOverflow.ellipsis, 
-                  style: const TextStyle(color: Colors.grey, fontSize: 11, height: 1.4),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    item.name,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    item.description,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        color: Colors.grey, fontSize: 11, height: 1.4),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              children: [
+                const SizedBox(height: 80),
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(Icons.add,
+                      size: 24, color: Theme.of(context).iconTheme.color),
                 ),
               ],
             ),
-          ),
-          const SizedBox(width: 10),
-          Column(
-            children: [
-              const SizedBox(height: 80),
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF3F4F6), 
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.add, size: 24, color: Colors.black),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

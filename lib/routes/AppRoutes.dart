@@ -27,6 +27,10 @@ import '../views/CheckoutScreen.dart';
 import '../views/PaymentMethodsScreen.dart';
 import '../views/OrderSuccessScreen.dart';
 import '../views/TrackOrderScreen.dart'; // Added
+import '../views/ProfileScreen.dart';
+import '../views/ThemeScreen.dart';
+import '../views/FAQScreen.dart';
+import '../views/EditProfileScreen.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -52,6 +56,10 @@ class AppRoutes {
   static const String trackOrder = '/track-order'; // Added
   static const String support = '/support';
   static const String favorites = '/favorites';
+  static const String profile = '/profile';
+  static const String themes = '/themes';
+  static const String faqs = '/faqs';
+  static const String editProfile = '/edit-profile';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -132,6 +140,10 @@ class AppRoutes {
       register: (context) => const SearchScreen(),
       support: (context) => const SupportScreen(),
       favorites: (context) => const FavoritesScreen(),
+      profile: (context) => const ProfileScreen(),
+      themes: (context) => const ThemeScreen(),
+      faqs: (context) => const FAQScreen(),
+      editProfile: (context) => const EditProfileScreen(),
     };
   }
 
@@ -140,6 +152,10 @@ class AppRoutes {
   static void navigateTo(BuildContext context, String routeName,
       {Object? arguments}) {
     Navigator.pushNamed(context, routeName, arguments: arguments);
+  }
+
+  static void navigateToProfile(BuildContext context) {
+    navigateTo(context, profile);
   }
 
   static Future<dynamic> navigateToPaymentMethods(

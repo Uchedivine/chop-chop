@@ -15,9 +15,7 @@ class TrackOrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -25,10 +23,11 @@ class TrackOrderScreen extends StatelessWidget {
             onTap: () => Navigator.pop(context),
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFF3F4F6),
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 18),
+              child: Icon(Icons.arrow_back_ios_new,
+                  color: Theme.of(context).iconTheme.color, size: 18),
             ),
           ),
         ),
@@ -45,11 +44,12 @@ class TrackOrderScreen extends StatelessWidget {
                   height: 300,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF9FAFB),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Center(
-                    child: Icon(Icons.map_sharp, size: 100, color: Colors.grey),
+                  child: Center(
+                    child: Icon(Icons.map_sharp,
+                        size: 100, color: Theme.of(context).disabledColor),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -61,14 +61,24 @@ class TrackOrderScreen extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Estimated Delivery Time:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        Text("Arriving at $estimatedTime", style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                        Text("Estimated Delivery Time:",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.bold)),
+                        Text("Arriving at $estimatedTime",
+                            style: Theme.of(context).textTheme.bodySmall),
                       ],
                     ),
                     Container(
                       padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                      child: const Text("SOS", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10)),
+                      decoration: const BoxDecoration(
+                          color: Colors.red, shape: BoxShape.circle),
+                      child: const Text("SOS",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10)),
                     )
                   ],
                 ),
@@ -78,10 +88,14 @@ class TrackOrderScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildStatusStep(vm, OrderStatus.confirmed, Icons.check_circle, "Order Confirmed"),
-                    _buildStatusStep(vm, OrderStatus.received, Icons.shopping_bag, "Order Recieved"),
-                    _buildStatusStep(vm, OrderStatus.onTheWay, Icons.delivery_dining, "On The Way"),
-                    _buildStatusStep(vm, OrderStatus.delivered, Icons.home_work, "Order Delivered"),
+                    _buildStatusStep(context, vm, OrderStatus.confirmed,
+                        Icons.check_circle, "Order Confirmed"),
+                    _buildStatusStep(context, vm, OrderStatus.received,
+                        Icons.shopping_bag, "Order Recieved"),
+                    _buildStatusStep(context, vm, OrderStatus.onTheWay,
+                        Icons.delivery_dining, "On The Way"),
+                    _buildStatusStep(context, vm, OrderStatus.delivered,
+                        Icons.home_work, "Order Delivered"),
                   ],
                 ),
                 const SizedBox(height: 30),
@@ -90,22 +104,31 @@ class TrackOrderScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF9FAFB),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Row(
                     children: [
-                      const CircleAvatar(radius: 25, backgroundColor: Colors.grey),
+                      CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Theme.of(context).disabledColor),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(vm.driverName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                            Text(vm.driverName,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold)),
                             Row(
                               children: [
-                                const Icon(Icons.star, color: Colors.orange, size: 14),
-                                Text(" ${vm.driverRating} (${vm.totalReviews})", style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                                const Icon(Icons.star,
+                                    color: Colors.orange, size: 14),
+                                Text(" ${vm.driverRating} (${vm.totalReviews})",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall),
                               ],
                             )
                           ],
@@ -120,19 +143,25 @@ class TrackOrderScreen extends StatelessWidget {
                 const SizedBox(height: 25),
 
                 // Delivery Address
-                const Text("Delivery Address", style: TextStyle(fontWeight: FontWeight.bold)),
+                Text("Delivery Address",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 Container(
                   padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF9FAFB),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     children: [
                       const Icon(Icons.location_on, color: Color(0xFFFF9431)),
                       const SizedBox(width: 10),
-                      Expanded(child: Text(deliveryAddress, style: const TextStyle(fontSize: 13))),
+                      Expanded(
+                          child: Text(deliveryAddress,
+                              style: Theme.of(context).textTheme.bodySmall)),
                     ],
                   ),
                 ),
@@ -144,13 +173,20 @@ class TrackOrderScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusStep(TrackOrderViewModel vm, OrderStatus status, IconData icon, String label) {
+  Widget _buildStatusStep(BuildContext context, TrackOrderViewModel vm,
+      OrderStatus status, IconData icon, String label) {
     bool isDone = vm.isStepCompleted(status);
     return Column(
       children: [
-        Icon(icon, color: isDone ? const Color(0xFFFF9431) : Colors.grey, size: 30),
+        Icon(icon,
+            color: isDone ? const Color(0xFFFF9431) : Colors.grey, size: 30),
         const SizedBox(height: 5),
-        Text(label, style: TextStyle(fontSize: 10, color: isDone ? const Color(0xFFFF9431) : Colors.grey)),
+        Text(label,
+            style: TextStyle(
+                fontSize: 10,
+                color: isDone
+                    ? const Color(0xFFFF9431)
+                    : Theme.of(context).disabledColor)),
       ],
     );
   }

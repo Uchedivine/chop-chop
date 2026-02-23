@@ -24,14 +24,14 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<OrderSuccessViewModel>(context, listen: false).generateOrderDetails();
+      Provider.of<OrderSuccessViewModel>(context, listen: false)
+          .generateOrderDetails();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Consumer<OrderSuccessViewModel>(
         builder: (context, vm, child) {
           return SingleChildScrollView(
@@ -43,21 +43,23 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                   child: Container(
                     height: 200,
                     width: 200,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFFFFF1E4),
+                      color: Theme.of(context).cardColor,
                     ),
-                    child: const Icon(Icons.delivery_dining, size: 100, color: Color(0xFFFF9431)),
+                    child: const Icon(Icons.delivery_dining,
+                        size: 100, color: Color(0xFFFF9431)),
                   ),
                 ),
                 const SizedBox(height: 30),
-                const Text("Enjoyment Galore!", 
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                const Text("Enjoyment Galore!",
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 Text(
                   "Your order to ${widget.restaurantName} has been completed and is on its way",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 40),
 
@@ -65,18 +67,22 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF9FAFB),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Order Summary", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      const Text("Order Summary",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
                       const SizedBox(height: 15),
                       _buildInfoRow("Order Number:", vm.orderNumber),
                       _buildInfoRow("Total Expense:", widget.totalExpense),
-                      _buildInfoRow("Delivery Address:", widget.deliveryAddress),
-                      _buildInfoRow("Estimated Delivery Time:", vm.estimatedTime),
+                      _buildInfoRow(
+                          "Delivery Address:", widget.deliveryAddress),
+                      _buildInfoRow(
+                          "Estimated Delivery Time:", vm.estimatedTime),
                     ],
                   ),
                 ),
@@ -90,16 +96,16 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                     onPressed: () {
                       // Navigate to Track Order with dynamic data
                       AppRoutes.navigateToTrackOrder(
-                        context, 
-                        widget.deliveryAddress, 
-                        vm.estimatedTime
-                      );
+                          context, widget.deliveryAddress, vm.estimatedTime);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFF9431),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text("Track Order", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    child: const Text("Track Order",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -107,12 +113,17 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                   width: double.infinity,
                   height: 55,
                   child: OutlinedButton(
-                    onPressed: () => AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.home),
+                    onPressed: () => AppRoutes.navigateToAndRemoveUntil(
+                        context, AppRoutes.home),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xFFFF9431)),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text("Return To Homepage", style: TextStyle(color: Color(0xFFFF9431), fontWeight: FontWeight.bold)),
+                    child: const Text("Return To Homepage",
+                        style: TextStyle(
+                            color: Color(0xFFFF9431),
+                            fontWeight: FontWeight.bold)),
                   ),
                 ),
               ],
@@ -132,10 +143,10 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
           Text(label, style: const TextStyle(color: Colors.grey, fontSize: 13)),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(value, 
-              textAlign: TextAlign.end,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)
-            ),
+            child: Text(value,
+                textAlign: TextAlign.end,
+                style:
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
           ),
         ],
       ),

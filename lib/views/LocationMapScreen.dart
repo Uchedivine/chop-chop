@@ -89,14 +89,15 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
             right: 20,
             child: FloatingActionButton(
               mini: true,
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).cardColor,
               onPressed: () async {
                 await locationVM.getCurrentLocation();
                 if (locationVM.currentPosition != null) {
                   _mapController.move(locationVM.currentPosition!, 15.0);
                 }
               },
-              child: const Icon(Icons.my_location, color: Colors.black),
+              child: Icon(Icons.my_location,
+                  color: Theme.of(context).iconTheme.color),
             ),
           ),
 
@@ -105,10 +106,13 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
             alignment: Alignment.bottomCenter,
             child: Container(
               padding: const EdgeInsets.all(24),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(30)),
+                boxShadow: const [
+                  BoxShadow(color: Colors.black12, blurRadius: 10)
+                ],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -131,7 +135,8 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
                       hintText: "Search address, street or state",
                       prefixIcon: const Icon(Icons.search, color: Colors.grey),
                       filled: true,
-                      fillColor: const Color(0xFFF5F5F5),
+                      fillColor:
+                          Theme.of(context).inputDecorationTheme.fillColor,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: BorderSide.none,

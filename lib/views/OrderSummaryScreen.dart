@@ -8,26 +8,22 @@ class OrderSummaryScreen extends StatelessWidget {
   final String restaurantName;
   final List<CartItem> restaurantItems;
 
-  const OrderSummaryScreen({
-    super.key, 
-    required this.restaurantName, 
-    required this.restaurantItems
-  });
+  const OrderSummaryScreen(
+      {super.key, required this.restaurantName, required this.restaurantItems});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new,
+              color: Theme.of(context).iconTheme.color, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          "Order Summary", 
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 18)
+        title: Text(
+          "Order Summary",
+          style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
         centerTitle: true,
       ),
@@ -47,8 +43,8 @@ class OrderSummaryScreen extends StatelessWidget {
 
           double subtotal = currentItems.fold(0, (sum, item) {
             final price = double.tryParse(
-              item.food.price.replaceAll(RegExp(r'[^0-9]'), '')
-            ) ?? 0;
+                    item.food.price.replaceAll(RegExp(r'[^0-9]'), '')) ??
+                0;
             return sum + (price * item.quantity);
           });
           const double deliveryFee = 900;
@@ -57,16 +53,16 @@ class OrderSummaryScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   children: [
                     // Restaurant Header Row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Restaurant: $restaurantName", 
-                          style: const TextStyle(fontWeight: FontWeight.w500)
-                        ),
+                        Text("Restaurant: $restaurantName",
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w500)),
                         IconButton(
                           onPressed: () {
                             showDialog(
@@ -86,7 +82,8 @@ class OrderSummaryScreen extends StatelessWidget {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      cart.clearRestaurantFromCart(restaurantName);
+                                      cart.clearRestaurantFromCart(
+                                          restaurantName);
                                       Navigator.pop(ctx);
                                       Navigator.pop(context);
                                     },
@@ -99,7 +96,8 @@ class OrderSummaryScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          icon: const Icon(Icons.delete_outline, color: Colors.red),
+                          icon: const Icon(Icons.delete_outline,
+                              color: Colors.red),
                         ),
                       ],
                     ),
@@ -139,56 +137,51 @@ class OrderSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildItemRow(BuildContext context, CartViewModel cart, CartItem item) {
+  Widget _buildItemRow(
+      BuildContext context, CartViewModel cart, CartItem item) {
     return Row(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.asset(
-            item.food.image, 
-            width: 65, 
-            height: 65, 
-            fit: BoxFit.cover
-          ),
+          child: Image.asset(item.food.image,
+              width: 65, height: 65, fit: BoxFit.cover),
         ),
         const SizedBox(width: 15),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                item.food.name, 
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)
-              ),
+              Text(item.food.name,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 15)),
               const SizedBox(height: 4),
-              Text(
-                item.food.price, 
-                style: const TextStyle(color: Colors.grey, fontSize: 13)
-              ),
+              Text(item.food.price,
+                  style: const TextStyle(color: Colors.grey, fontSize: 13)),
             ],
           ),
         ),
         // Quantity Controls
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFF3F4F6),
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
             children: [
               IconButton(
                 icon: const Icon(Icons.remove, size: 16),
-                onPressed: () => cart.decrementQuantity(cart.items.indexOf(item)),
+                onPressed: () =>
+                    cart.decrementQuantity(cart.items.indexOf(item)),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
               ),
-              Text(
-                "${item.quantity}", 
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)
-              ),
+              Text("${item.quantity}",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 15)),
               IconButton(
                 icon: const Icon(Icons.add, size: 16),
-                onPressed: () => cart.incrementQuantity(cart.items.indexOf(item)),
+                onPressed: () =>
+                    cart.incrementQuantity(cart.items.indexOf(item)),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
               ),
@@ -199,26 +192,26 @@ class OrderSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomSummary(BuildContext context, double subtotal, double deliveryFee) {
+  Widget _buildBottomSummary(
+      BuildContext context, double subtotal, double deliveryFee) {
     double totalAmount = subtotal + deliveryFee;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(25, 25, 25, 35),
-      decoration: const BoxDecoration(
-        color: Color(0xFFF3F4F6), 
-        borderRadius: BorderRadius.vertical(top: Radius.circular(35))
-      ),
+      decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(35))),
       child: Column(
         children: [
-          _summaryRow("Cost of total items:", "₦${subtotal.toStringAsFixed(0)}"),
-          _summaryRow("Delivery Fee:", "₦${deliveryFee.toStringAsFixed(0)}"),
-          _summaryRow("Discount:", "-"),
+          _summaryRow(context, "Cost of total items:",
+              "₦${subtotal.toStringAsFixed(0)}"),
+          _summaryRow(
+              context, "Delivery Fee:", "₦${deliveryFee.toStringAsFixed(0)}"),
+          _summaryRow(context, "Discount:", "-"),
           const Divider(height: 30),
           _summaryRow(
-            "Total Amount:", 
-            "₦${totalAmount.toStringAsFixed(0)}", 
-            isTotal: true
-          ),
+              context, "Total Amount:", "₦${totalAmount.toStringAsFixed(0)}",
+              isTotal: true),
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
@@ -226,10 +219,8 @@ class OrderSummaryScreen extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 // Get the current delivery address from CheckoutViewModel if available
-                final checkoutVm = Provider.of<CheckoutViewModel>(
-                  context, 
-                  listen: false
-                );
+                final checkoutVm =
+                    Provider.of<CheckoutViewModel>(context, listen: false);
 
                 Navigator.push(
                   context,
@@ -246,18 +237,14 @@ class OrderSummaryScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFF9431),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)
-                ),
+                    borderRadius: BorderRadius.circular(12)),
                 elevation: 0,
               ),
-              child: const Text(
-                "Proceed to Checkout", 
-                style: TextStyle(
-                  color: Colors.white, 
-                  fontWeight: FontWeight.bold, 
-                  fontSize: 16
-                )
-              ),
+              child: const Text("Proceed to Checkout",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16)),
             ),
           )
         ],
@@ -265,28 +252,29 @@ class OrderSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _summaryRow(String label, String value, {bool isTotal = false}) {
+  Widget _summaryRow(BuildContext context, String label, String value,
+      {bool isTotal = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label, 
-            style: TextStyle(
-              fontSize: isTotal ? 16 : 14,
-              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              color: isTotal ? Colors.black : Colors.grey[700],
-            )
-          ),
-          Text(
-            value, 
-            style: TextStyle(
-              fontSize: isTotal ? 18 : 14,
-              fontWeight: FontWeight.bold,
-              color: isTotal ? const Color(0xFFFF9431) : Colors.black,
-            )
-          ),
+          Text(label,
+              style: TextStyle(
+                fontSize: isTotal ? 16 : 14,
+                fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+                color: isTotal
+                    ? Theme.of(context).textTheme.bodyLarge?.color
+                    : Theme.of(context).textTheme.bodyMedium?.color,
+              )),
+          Text(value,
+              style: TextStyle(
+                fontSize: isTotal ? 18 : 14,
+                fontWeight: FontWeight.bold,
+                color: isTotal
+                    ? const Color(0xFFFF9431)
+                    : Theme.of(context).textTheme.bodyLarge?.color,
+              )),
         ],
       ),
     );

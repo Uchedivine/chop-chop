@@ -20,10 +20,11 @@ class CategoryItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8F8F8),
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Image.asset(iconPath, height: 35, width: 35, fit: BoxFit.contain),
+            child: Image.asset(iconPath,
+                height: 35, width: 35, fit: BoxFit.contain),
           ),
           const SizedBox(height: 6),
           Text(
@@ -34,7 +35,6 @@ class CategoryItem extends StatelessWidget {
               fontSize: 10,
               fontWeight: FontWeight.w500,
               height: 1.1,
-              color: Colors.black,
             ),
           ),
         ],
