@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/LocationViewModel.dart';
 import '../viewmodels/home_view_model.dart';
-import '../viewmodels/CartViewModel.dart'; // Added CartViewModel
+import '../viewmodels/CartViewModel.dart';
+import '../viewmodels/FavoritesViewModel.dart';
 import '../widgets/CategoryItem.dart';
 import '../widgets/RestaurantCard.dart';
-import '../views/SearchScreen.dart';
+
 import '../routes/AppRoutes.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final homeVM = Provider.of<HomeViewModel>(context);
     // Listen to the CartViewModel to update the counter badge in real-time
     final cartVM = Provider.of<CartViewModel>(context);
+    final favoritesVM = Provider.of<FavoritesViewModel>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -54,9 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
               _buildSectionHeader("Categories"),
               _buildCategoryList(homeVM.categories),
               _buildSectionHeader("Popular Restaurants", showSeeAll: true),
-              _buildRestaurantList(homeVM.restaurants),
+              _buildRestaurantList(context, homeVM.restaurants, favoritesVM),
               _buildSectionHeader("Fastest Deliveries", showSeeAll: true),
-              _buildRestaurantList(homeVM.restaurants),
+              _buildRestaurantList(context, homeVM.restaurants, favoritesVM),
               const SizedBox(height: 30),
             ],
           ),
@@ -242,7 +244,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRestaurantList(List<Map<String, dynamic>> restaurants) {
+  Widget _buildRestaurantList(BuildContext context,
+      List<Map<String, dynamic>> restaurants, FavoritesViewModel favoritesVM) {
     return SizedBox(
       height: 240,
       child: ListView.builder(
@@ -266,11 +269,9 @@ class _HomeScreenState extends State<HomeScreen> {
               rating: data['rating'],
               price: data['price'] ?? "1,000",
               time: data['time'] ?? "15-20 min",
-              isFavorite: data['isFavorite'] ?? false,
+              isFavorite: favoritesVM.isFavorite(data),
               onFavoriteToggle: () {
-                setState(() {
-                  data['isFavorite'] = !(data['isFavorite'] ?? false);
-                });
+                favoritesVM.toggleFavorite(data);
               },
             ),
           );
@@ -311,6 +312,8 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: (index) {
         if (index == 2) {
           Navigator.pushNamed(context, AppRoutes.support);
+        } else if (index == 3) {
+          Navigator.pushNamed(context, AppRoutes.favorites);
         } else {
           setState(() => _selectedNavIndex = index);
         }

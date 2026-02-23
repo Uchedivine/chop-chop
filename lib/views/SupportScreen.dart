@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/SupportViewModel.dart';
 import '../viewmodels/ThemeViewModel.dart';
+import '../routes/AppRoutes.dart';
 
 class SupportScreen extends StatelessWidget {
   const SupportScreen({super.key});
@@ -59,6 +60,8 @@ class SupportScreen extends StatelessWidget {
       onTap: (index) {
         if (index == 0) {
           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+        } else if (index == 3) {
+          Navigator.pushNamed(context, AppRoutes.favorites);
         } else if (index != 2) {
           // Add navigation for other tabs if needed, for now just Home and Support are linked
           debugPrint("Tap index: $index");
